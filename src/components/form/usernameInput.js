@@ -4,6 +4,7 @@ import omit from 'lodash/omit';
 import 'unfetch/polyfill';
 
 import LabelInputField from './labelInputField';
+import Select from './select';
 
 const COMPONENT_CLASSNAME = 'field-usernameInput';
 
@@ -115,7 +116,7 @@ export default class UsernameInput extends Component {
         });
     }
 
-    render(props) {
+    render({ domains, ...props }) {
         return (
             <LabelInputField
                 {...omit(props, ['maxlength', 'minlength'])}
@@ -125,6 +126,8 @@ export default class UsernameInput extends Component {
                 oninput={debounce(this.oninput.bind(this), 300)}
                 onchange={debounce(this.onchange.bind(this), 300)}
             >
+                <Select {...domains} />
+
                 {this.state.isError && (
                     <div class="error">
                         {this.state.errors.map((error) => (
@@ -135,6 +138,7 @@ export default class UsernameInput extends Component {
 
                 {this.state.isError && this.state.suggestions && (
                     <div class="suggestions">
+                        <h4>Available usernames:</h4>
                         {this.state.suggestions.map((name) => (
                             <button type="button" onclick={() => this.chooseSuggestion(name)}>
                                 {name}

@@ -3,20 +3,53 @@ import App from './App';
 
 const node = document.getElementById('app');
 
+const matchIframe = (name) => {
+    const url = window.location.search || '';
+    return url.includes(`name=${name}`);
+};
+
 const cb = ({ data: { type, data = {} } = {} }) => {
-    if (type === 'create.form') {
+    if (type === 'create.form' && matchIframe(data.name)) {
         console.log('[CONFIG]', data.config);
         render(<App config={data.config} />, node, node.lastChild);
         node.setAttribute('data-name', data.name);
         window.removeEventListener('message', cb, false);
     }
 };
+
 window.addEventListener('message', cb, false);
 
 // window.postMessage({
 //     type: 'create.form',
 //     data: {
-//         name: 'dew',
+//         name: 'bottom',
+//         config: [
+//             {
+//                 component: 'email',
+//                 label: 'Add a recovery email',
+//                 placeholder: 'Recovery Email',
+//                 type: 'email',
+//                 name: 'notificationEmail',
+//             },
+//             {
+//                 component: 'signupSubmit',
+//                 messages: {
+//                     agreeLabel: 'By clicking Create Account, you agree to abide by',
+//                     agreeLink: 'ProtonMail\'s Terms and Conditions',
+//                     alreadyUser: 'Already have an account?'
+//                 },
+//                 button: {
+//                     label: 'Create Account'
+//                 }
+//             },
+//         ]
+//     }
+// });
+
+// window.postMessage({
+//     type: 'create.form',
+//     data: {
+//         name: 'top',
 //         config: [
 //             {
 //                 component: 'username',
@@ -25,22 +58,22 @@ window.addEventListener('message', cb, false);
 //                 maxlength: 10,
 //                 minlength: 3,
 //                 required: true,
-//                 name: 'username'
+//                 name: 'username',
+//                 domains: {
+//                     component: 'domains',
+//                     label: 'Select a domain',
+//                     name: 'domain',
+//                     options: [
+//                         {
+//                             selected: true,
+//                             value: 'protonmail.com'
+//                         },
+//                         {
+//                             value: 'protonmail.ch'
+//                         }
+//                     ]
+//                 }
 //             },
-//             {
-//                 component: 'domains',
-//                 label: 'Select a domain',
-//                 name: 'domain',
-//                 options: [
-//                     {
-//                         selected: true,
-//                         value: 'protonmail.com'
-//                     },
-//                     {
-//                         value: 'protonmail.ch'
-//                     }
-//                 ]
-//             }
 //         ]
 //     }
 // });

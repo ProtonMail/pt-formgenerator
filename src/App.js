@@ -2,19 +2,27 @@ import { h, Component } from 'preact';
 
 import LabelInputField from './components/form/labelInputField';
 import UsernameInput from './components/form/usernameInput';
+import EmailInput from './components/form/emailInput';
+import SignupSubmit from './components/form/signupSubmit';
 import Select from './components/form/select';
-// import './App.css';
+import './App.scss';
 
 export default class App extends Component {
     render({ config }) {
         return (
-            <div>
+            <div class="formList">
                 {config.map(({ component, ...input }) => {
                     if (component === 'username') {
                         return <UsernameInput {...input} />;
                     }
                     if (component === 'domains') {
                         return <Select {...input} />;
+                    }
+                    if (input.type === 'email') {
+                        return <EmailInput {...input} />;
+                    }
+                    if (component === 'signupSubmit') {
+                        return <SignupSubmit {...input} />;
                     }
                     return <LabelInputField {...input} />;
                 })}
