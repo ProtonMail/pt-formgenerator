@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 
 import LabelInputField from './components/form/labelInputField';
+import UsernameInput from './components/form/usernameInput';
 import './App.css';
 
 export default class App extends Component {
@@ -10,27 +11,44 @@ export default class App extends Component {
             console.log(item);
         }
     }
-    render() {
+    render({ config }) {
+        console.log('[CONFIG]', config);
         return (
             <div>
-                <form onsubmit={(e) => (e.preventDefault(), this.submit(e))} novalidate>
-                    <LabelInputField
-                        name="username"
-                        placeholder="Jean Valjean"
-                        labelText="Select your username"
-                        oninput={({ target }) => console.log(target.value)}
-                    />
+                <form name="dew" onsubmit={(e) => (e.preventDefault(), this.submit(e))} novalidate>
+                    {config.map(({ component, ...input }) => {
+                        if (component === 'username') {
+                            return <UsernameInput {...input} />;
+                        }
+                        return <LabelInputField {...input} />;
+                    })}
 
-                    <LabelInputField
-                        name="password"
-                        type="password"
-                        placeholder="*******"
-                        labelText="Your password"
-                        oninput={({ target }) => console.log(target.value)}
-                    />
                     <button>Send</button>
                 </form>
             </div>
         );
     }
 }
+
+/*
+<LabelInputField
+    name="username"
+    placeholder="Jean Valjean"
+    labelText="Select your username"
+    oninput={({ target }) => console.log(target.value)}
+/>
+<UsernameInput
+    name="username"
+    placeholder="Jean Valjean"
+    labelText="Select your username"
+    oninput={({ target }) => console.log(target.value)}
+/>
+
+<LabelInputField
+    name="password"
+    type="password"
+    placeholder="*******"
+    labelText="Your password"
+    oninput={({ target }) => console.log(target.value)}
+/>
+ */

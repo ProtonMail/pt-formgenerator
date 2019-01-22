@@ -18,6 +18,8 @@
     "prettier": "^1.16.0"
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
+    "lodash.omit": "^4.5.0",
     "preact": "^8.4.2"
   },
   "lint-staged": {

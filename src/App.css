@@ -12,14 +12,24 @@ body {
     sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
+#app {
+    margin: 2rem auto;
+    width: 800px
 }
 
 h1 {
   font-weight: 300;
+}
+
+.field {
+    padding: 1rem;
+    border: 1px solid #e5e5e5;
+}
+
+.field + .field {
+    margin-top: 1rem
+}
+
+.error {
+    color: red;
 }

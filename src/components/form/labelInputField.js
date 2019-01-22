@@ -1,10 +1,11 @@
 import { h, render } from 'preact';
 
-function labelInputField({ labelText, name, oninput, placeholder, type }) {
+function labelInputField({ label, children, ...attributes }) {
     return (
         <div class="field">
-            <label for={name}>{labelText}</label>
-            <input type={type} placeholder={placeholder} name={name} oninput={oninput} id={name} />
+            <label for={name}>{label}</label>
+            <input {...attributes} id={attributes.name} />
+            {children}
         </div>
     );
 }
