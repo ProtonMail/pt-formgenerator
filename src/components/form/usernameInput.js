@@ -1,17 +1,20 @@
 import { h, render, Component } from 'preact';
 import debounce from 'lodash/debounce';
 import omit from 'lodash/omit';
+import 'unfetch/polyfill';
 
 import LabelInputField from './labelInputField';
 
+const COMPONENT_CLASSNAME = 'field-usernameInput';
+
 const getUserName = (value) => {
     const URL = 'https://dev.protonmail.com/api/users/available';
-    const headers = new Headers({
-        'x-pm-apiversion': 3,
-        'x-pm-appversion': 'Web_3.15.13'
-    });
+
     return fetch(URL + `?Name=${value}`, {
-        headers
+        headers: {
+            'x-pm-apiversion': 3,
+            'x-pm-appversion': 'Web_3.15.13'
+        }
     }).then((response) => {
         return response.json().then((data) => {
             return {
@@ -23,9 +26,6 @@ const getUserName = (value) => {
 };
 
 function validator(value, { required, maxlength, minlength, data: { success, data: requestData = {} } = {} }) {
-    const errors = [];
-    const classNames = [];
-
     const state = {
         value,
         isError: false,
@@ -48,6 +48,7 @@ function validator(value, { required, maxlength, minlength, data: { success, dat
             ...state,
             isError: true,
             errors: [requestData.Error],
+            classNames: ['input-error-username'],
             suggestions: (requestData.Details || {}).Suggestions
         };
     }
@@ -83,12 +84,10 @@ export default class UsernameInput extends Component {
         if (this.state.custom !== value) {
             state.custom = '';
         }
-        console.log('INPUT', state);
         return this.setState(state);
     }
     onchange({ target }) {
         const value = target.value || '';
-        console.log('CHANGE', value);
 
         // Don't perform the validation of the username if no changes or already isError
         if (this.state.custom === value || this.state.isError) {
@@ -97,7 +96,6 @@ export default class UsernameInput extends Component {
 
         getUserName(value).then((data) => {
             const state = this.validate(value, data);
-            console.log('[VALID]', state);
 
             // Erase old custom value if success
             this.setState({
@@ -112,6 +110,7 @@ export default class UsernameInput extends Component {
             custom: value,
             Suggestions: undefined,
             errors: [],
+            classNames: [],
             isError: false
         });
     }
@@ -121,7 +120,8 @@ export default class UsernameInput extends Component {
             <LabelInputField
                 {...omit(props, ['maxlength', 'minlength'])}
                 value={this.state.custom || this.state.value}
-                className={(this.state.classNames || []).join(' ')}
+                className={COMPONENT_CLASSNAME}
+                classNameInput={(this.state.classNames || []).join(' ')}
                 oninput={debounce(this.oninput.bind(this), 300)}
                 onchange={debounce(this.onchange.bind(this), 300)}
             >

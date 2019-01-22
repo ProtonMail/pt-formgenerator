@@ -17,9 +17,30 @@ const config = [
         component: 'domains',
         label: 'Select a domain',
         name: 'domains',
-        options: ['protonmail.com', 'protonmail.ch']
+        options: [
+            {
+                selected: true,
+                value: 'protonmail.com'
+            },
+            {
+                value: 'protonmail.ch'
+            }
+        ]
     }
 ];
-// window.addEventListener('message', cb, false);
 
-render(<App config={JSON.parse(JSON.stringify(config))} />, node, node.lastChild);
+const cb = ({ data: { type, data = {} } = {} }) => {
+    if (type === 'create.form') {
+        console.log('[CONFIG]', config);
+        render(<App config={data.config} />, node, node.lastChild);
+        window.removeEventListener('message', cb, false);
+    }
+};
+window.addEventListener('message', cb, false);
+
+// window.postMessage({
+//     type: 'create.form',
+//     data: {
+//         config
+//     }
+// });

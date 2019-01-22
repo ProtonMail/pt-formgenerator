@@ -1,10 +1,12 @@
 import { h, render } from 'preact';
 
-function labelInputField({ label, children, ...attributes }) {
+const getClassNames = (start, extend) => [start, extend].filter(Boolean).join(' ');
+
+function labelInputField({ label, children, classNameInput, className, ...attributes }) {
     return (
-        <div class="field">
+        <div className={getClassNames('field', className)}>
             <label for={name}>{label}</label>
-            <input {...attributes} id={attributes.name} />
+            <input {...attributes} id={attributes.name} className={getClassNames('input', classNameInput)} />
             {children}
         </div>
     );
