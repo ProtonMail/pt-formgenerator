@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel src/index.html",
-    "build": "del dist && parcel build src/main.js"
+    "build": "del dist && parcel build src/main.js --public-url ./"
   },
   "author": "",
   "license": "ISC",
