@@ -28,7 +28,7 @@ input:not([type="checkbox"]):not([type="radio"]) {
     color: $color;
 }
 
-.error {
+.error, .success {
     padding: .8rem 1rem;
     margin: 1rem 0;
     background: $error;
@@ -39,6 +39,11 @@ input:not([type="checkbox"]):not([type="radio"]) {
         padding: 0;
         margin: 0;
     }
+}
+
+.success {
+    background-color: $success;
+    color: $color;
 }
 
 .suggestions {
@@ -151,7 +156,7 @@ a {
         display: flex;
         flex-wrap: wrap;
 
-        .error {
+        .error, .success {
             width: 100%;
         }
     }

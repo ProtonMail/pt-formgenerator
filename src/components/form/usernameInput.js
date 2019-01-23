@@ -30,6 +30,7 @@ function validator(value, { required, maxlength, minlength, data: { success, dat
     const state = {
         value,
         isError: false,
+        isAvailable: false,
         errors: [],
         classNames: [],
         suggestions: undefined
@@ -68,6 +69,7 @@ function validator(value, { required, maxlength, minlength, data: { success, dat
         state.classNames.push('input-error-pattern');
     }
     state.isError = !!state.errors.length;
+    state.isAvailable = !state.errors.length;
     return state;
 }
 
@@ -100,6 +102,7 @@ export default class UsernameInput extends Component {
 
             // Erase old custom value if success
             this.setState({
+                isAvailable: data.success,
                 custom: data.success ? '' : this.state.custom,
                 ...state
             });
@@ -109,6 +112,7 @@ export default class UsernameInput extends Component {
     chooseSuggestion(value) {
         this.setState({
             custom: value,
+            isAvailable: true,
             Suggestions: undefined,
             errors: [],
             classNames: [],
@@ -144,6 +148,11 @@ export default class UsernameInput extends Component {
                                 {name}
                             </button>
                         ))}
+                    </div>
+                )}
+                {this.state.isAvailable && (
+                    <div class="success">
+                        <p>Username available</p>
                     </div>
                 )}
             </LabelInputField>
