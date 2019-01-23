@@ -1,6 +1,6 @@
 Tested with:
-    - Node.js `v11.6.0`
-    - npm `6.5.0-next.0` ┐(‘～`；)┌
+- Node.js `v11.6.0`
+- npm `6.5.0-next.0` ┐(‘～`；)┌
 
 Before you start: `$ npm i`.
 
@@ -87,6 +87,6 @@ window.postMessage({
 - `$ npm run build`
 
 It will create 3 files:
-    - `dist/main.js`: _App bundle_
-    - `dist/main.js.map`: _Sourcemap_
-    - `dist/main.css`: _Stylesheet_
+- `dist/main.js`: _App bundle_
+- `dist/main.js.map`: _Sourcemap_
+- `dist/main.css`: _Stylesheet_
