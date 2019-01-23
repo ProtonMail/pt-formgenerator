@@ -128,12 +128,10 @@ export default class UsernameInput extends Component {
         });
     }
 
-    render({ domains, api, ...props }) {
-        request = api;
-
+    render({ domains, ...props }) {
         return (
             <LabelInputField
-                {...omit(props, ['maxlength', 'minlength'])}
+                {...omit(props, ['maxlength', 'minlength', 'api'])}
                 value={this.state.custom || this.state.value}
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}
