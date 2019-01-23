@@ -59,6 +59,13 @@ window.addEventListener('message', cb, false);
 //                 minlength: 3,
 //                 required: true,
 //                 name: 'username',
+//                 api: {
+//                     url: 'https://mail.protonmail.com/api/users/available',
+//                     headers: {
+//                         'x-pm-apiversion': 3,
+//                         'x-pm-appversion': 'Web_3.15.13'
+//                     }
+//                 },
 //                 domains: {
 //                     component: 'domains',
 //                     label: 'Select a domain',

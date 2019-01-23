@@ -55,6 +55,13 @@ window.postMessage({
         config: [
             {
                 component: 'username',
+                api: {
+                    url: 'https://mail.protonmail.com/api/users/available',
+                    headers: {
+                        'x-pm-apiversion': 3,
+                        'x-pm-appversion': 'Web_3.15.13'
+                    }
+                },
                 label: 'Choose a username',
                 placeholder: 'Jean Valjean',
                 maxlength: 10,
@@ -81,6 +88,7 @@ window.postMessage({
 });
 ```
 
+> For this component you can see a custom config for the API, with a route and custom headers.
 
 ## Build
 
