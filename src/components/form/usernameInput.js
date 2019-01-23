@@ -69,7 +69,7 @@ function validator(value, { required, maxlength, minlength, data: { success, dat
         state.classNames.push('input-error-pattern');
     }
     state.isError = !!state.errors.length;
-    state.isAvailable = !state.errors.length;
+    state.isAvailable = success === true && !state.isError;
     return state;
 }
 
