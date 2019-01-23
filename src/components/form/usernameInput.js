@@ -8,15 +8,12 @@ import Select from './select';
 
 const COMPONENT_CLASSNAME = 'field-usernameInput';
 
-const getUserName = (value) => {
-    const URL = 'https://dev.protonmail.com/api/users/available';
+let request = {};
 
-    return fetch(URL + `?Name=${value}`, {
-        headers: {
-            'x-pm-apiversion': 3,
-            'x-pm-appversion': 'Web_3.15.13'
-        }
-    }).then((response) => {
+const getUserName = (value) => {
+    const { url, headers } = request;
+
+    return fetch(url + `?Name=${value}`, { headers }).then((response) => {
         return response.json().then((data) => {
             return {
                 success: response.ok,
@@ -74,6 +71,17 @@ function validator(value, { required, maxlength, minlength, data: { success, dat
 }
 
 export default class UsernameInput extends Component {
+    constructor(props) {
+        super();
+
+        if (!props.api) {
+            throw new Error(
+                'You configure a custom API for this component\n\n --> { url:<String>, headers:<Object> }\n'
+            );
+        }
+
+        request = props.api;
+    }
     validate(value, data) {
         const { required, maxlength, minlength } = this.props;
         return validator(value, { required, maxlength, minlength, data });
@@ -120,7 +128,9 @@ export default class UsernameInput extends Component {
         });
     }
 
-    render({ domains, ...props }) {
+    render({ domains, api, ...props }) {
+        request = api;
+
         return (
             <LabelInputField
                 {...omit(props, ['maxlength', 'minlength'])}
