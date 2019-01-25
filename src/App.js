@@ -5,7 +5,7 @@ import UsernameInput from './components/form/usernameInput';
 import EmailInput from './components/form/emailInput';
 import SignupSubmit from './components/form/signupSubmit';
 import Select from './components/form/select';
-import './App.scss';
+// import './App.scss';
 
 export default class App extends Component {
     render({ config }) {
