@@ -23,6 +23,13 @@ const getUserName = (value) => {
     });
 };
 
+const contact = (data = {}) => {
+    window.parent.postMessage({
+        type: 'usernameInput.info',
+        data
+    });
+};
+
 function validator(value, { required, maxlength, minlength, data: { success, data: requestData = {} } = {} }) {
     const state = {
         value,
@@ -95,6 +102,11 @@ export default class UsernameInput extends Component {
         if (this.state.custom !== value) {
             state.custom = '';
         }
+
+        if (this.state.isError !== state.isError) {
+            contact(state);
+        }
+
         return this.setState(state);
     }
     onchange({ target }) {
@@ -108,6 +120,10 @@ export default class UsernameInput extends Component {
         getUserName(value).then((data) => {
             const state = this.validate(value, data);
 
+            if (this.state.isError !== state.isError) {
+                contact(state);
+            }
+
             // Erase old custom value if success
             this.setState({
                 isAvailable: data.success,
@@ -118,14 +134,16 @@ export default class UsernameInput extends Component {
     }
 
     chooseSuggestion(value) {
-        this.setState({
+        const state = {
             custom: value,
             isAvailable: true,
             Suggestions: undefined,
             errors: [],
             classNames: [],
             isError: false
-        });
+        };
+        contact(state);
+        this.setState(state);
     }
 
     render({ domains, ...props }) {

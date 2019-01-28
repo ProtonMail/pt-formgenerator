@@ -30,8 +30,8 @@ export default {
     input: 'src/main.js',
     output: {
         file: `dist/main.js`,
-        format: 'cjs',
-        name: 'easyToggleState'
+        format: 'umd', // iife or umd for our app, with cjs window is broken
+        name: 'abuseForm'
     },
     plugins
 };

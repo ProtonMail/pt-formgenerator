@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel src/index.html",
-    "build": "del dist && rollup -c --sourcemap & sass src/App.scss | postcss > dist/main.css; wait"
+    "build": "del dist && rollup -c --sourcemap && sass src/App.scss | postcss > dist/main.css;"
   },
   "author": "",
   "license": "ISC",
