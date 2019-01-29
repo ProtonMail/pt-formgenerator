@@ -5,6 +5,7 @@ import 'unfetch/polyfill';
 
 import LabelInputField from './labelInputField';
 import Select from './select';
+import bridge from '../../lib/bridge';
 
 const COMPONENT_CLASSNAME = 'field-usernameInput';
 
@@ -23,12 +24,9 @@ const getUserName = (value) => {
     });
 };
 
-const contact = (data = {}) => {
-    window.parent.postMessage({
-        type: 'usernameInput.info',
-        data
-    });
-};
+const callBridge = bridge('usernameInput.info', ({ suggestions = [], isError, isAvailable } = {}) => {
+    return { suggestions, isError, isAvailable };
+});
 
 function validator(value, { required, maxlength, minlength, data: { success, data: requestData = {} } = {} }) {
     const state = {
@@ -104,7 +102,7 @@ export default class UsernameInput extends Component {
         }
 
         if (this.state.isError !== state.isError) {
-            contact(state);
+            callBridge(state, this.props);
         }
 
         return this.setState(state);
@@ -120,14 +118,13 @@ export default class UsernameInput extends Component {
         getUserName(value).then((data) => {
             const state = this.validate(value, data);
 
-            if (this.state.isError !== state.isError) {
-                contact(state);
-            }
+            // Always inform the parent that we made a change
+            callBridge(state, this.props);
 
             // Erase old custom value if success
             this.setState({
                 isAvailable: data.success,
-                custom: data.success ? '' : this.state.custom,
+                // custom: data.success ? '' : this.state.custom,
                 ...state
             });
         });
@@ -137,12 +134,12 @@ export default class UsernameInput extends Component {
         const state = {
             custom: value,
             isAvailable: true,
-            Suggestions: undefined,
+            suggestions: undefined,
             errors: [],
             classNames: [],
             isError: false
         };
-        contact(state);
+        callBridge(state, this.props);
         this.setState(state);
     }
 
@@ -153,7 +150,7 @@ export default class UsernameInput extends Component {
                 value={this.state.custom || this.state.value}
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}
-                oninput={debounce(this.oninput.bind(this), 300)}
+                oninput={debounce(this.oninput.bind(this), 200)}
                 onchange={debounce(this.onchange.bind(this), 300)}
             >
                 <Select {...domains} />
