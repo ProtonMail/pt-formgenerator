@@ -1,12 +1,10 @@
 import { h, render } from 'preact';
 
-const submit = () => {
-    window.parent.postMessage({
-        type: 'submit.init'
-    });
-};
+import bridge from '../../lib/bridge';
 
-function signupSubmit({ messages, button }) {
+const submit = bridge('submit.init');
+
+function signupSubmit({ messages, button, iframeName }) {
     return (
         <footer class="signupSubmit">
             <p>
@@ -18,7 +16,7 @@ function signupSubmit({ messages, button }) {
                 .
             </p>
 
-            <button type="submit" onclick={() => submit()} class="btn btn-submit">
+            <button type="submit" onclick={() => submit({}, { iframeName })} class="btn btn-submit">
                 {button.label}
             </button>
 

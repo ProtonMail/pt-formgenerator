@@ -8,23 +8,23 @@ import Select from './components/form/select';
 // import './App.scss';
 
 export default class App extends Component {
-    render({ config }) {
+    render({ config, name }) {
         return (
             <div class="formList">
                 {config.map(({ component, ...input }) => {
                     if (component === 'username') {
-                        return <UsernameInput {...input} />;
+                        return <UsernameInput {...input} iframeName={name} />;
                     }
                     if (component === 'domains') {
-                        return <Select {...input} />;
+                        return <Select {...input} iframeName={name} />;
                     }
                     if (input.type === 'email') {
-                        return <EmailInput {...input} />;
+                        return <EmailInput {...input} iframeName={name} />;
                     }
                     if (component === 'signupSubmit') {
-                        return <SignupSubmit {...input} />;
+                        return <SignupSubmit {...input} iframeName={name} />;
                     }
-                    return <LabelInputField {...input} />;
+                    return <LabelInputField {...input} iframeName={name} />;
                 })}
             </div>
         );

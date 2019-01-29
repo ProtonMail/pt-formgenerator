@@ -2,8 +2,11 @@ import { h, render, Component } from 'preact';
 import debounce from 'lodash/debounce';
 
 import LabelInputField from './labelInputField';
+import bridge from '../../lib/bridge';
 
 const REGEX_EMAIL = /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/i;
+
+const callBridge = bridge('emailInput.info', ({ isError }) => ({ isError }));
 
 function validator(value) {
     const state = {
@@ -34,6 +37,7 @@ export default class EmailInput extends Component {
     oninput({ target }) {
         const value = target.value || '';
         const state = this.validate(value);
+        callBridge(state, this.props);
         return this.setState(state);
     }
 
