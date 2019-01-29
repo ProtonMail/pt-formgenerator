@@ -1,26 +1,5 @@
-Tested with:
-- Node.js `v11.6.0`
-- npm `6.5.0-next.0` ┐(‘～`；)┌
+import '../App.scss';
 
-Before you start: `$ npm i`.
-
-## Dev
-
-- `$ npm start`
-
-To setup tests, open `src/main.js` then uncomment the L3 `import './dev/env';`;
-
-That's it. Now you can test:
-- URL: `http://localhost:1234/?name=bottom`
-- URL: `http://localhost:1234/?name=top`
-
-### About dev env
-
-- URL: `http://localhost:1234/?name=bottom`
-
-> cf the key **name** inside data.
-
-```javascript
 window.postMessage({
     type: 'create.form',
     data: {
@@ -47,13 +26,7 @@ window.postMessage({
         ]
     }
 });
-```
 
-- URL: `http://localhost:1234/?name=top`
-
-> cf the key **name** inside data.
-
-```javascript
 window.postMessage({
     type: 'create.form',
     data: {
@@ -61,6 +34,12 @@ window.postMessage({
         config: [
             {
                 component: 'username',
+                label: 'Choose a username',
+                placeholder: 'Jean Valjean',
+                maxlength: 10,
+                minlength: 3,
+                required: true,
+                name: 'username',
                 api: {
                     url: 'https://mail.protonmail.com/api/users/available',
                     headers: {
@@ -68,12 +47,6 @@ window.postMessage({
                         'x-pm-appversion': 'Web_3.15.13'
                     }
                 },
-                label: 'Choose a username',
-                placeholder: 'Jean Valjean',
-                maxlength: 10,
-                minlength: 3,
-                required: true,
-                name: 'username',
                 domains: {
                     component: 'domains',
                     label: 'Select a domain',
@@ -92,15 +65,3 @@ window.postMessage({
         ]
     }
 });
-```
-
-> For this component you can see a custom config for the API, with a route and custom headers.
-
-## Build
-
-- `$ npm run build`
-
-It will create 3 files:
-- `dist/main.js`: _App bundle_
-- `dist/main.js.map`: _Sourcemap_
-- `dist/main.css`: _Stylesheet_
