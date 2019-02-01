@@ -8,8 +8,6 @@ Before you start: `$ npm i`.
 
 - `$ npm start`
 
-To setup tests, open `src/main.js` then uncomment the L3 `import './dev/env';`;
-
 That's it. Now you can test:
 - URL: `http://localhost:1234/?name=bottom`
 - URL: `http://localhost:1234/?name=top`
@@ -25,6 +23,7 @@ window.postMessage({
     type: 'create.form',
     data: {
         name: 'bottom',
+        targetOrigin: '*',
         config: [
             {
                 component: 'email',
@@ -58,6 +57,7 @@ window.postMessage({
     type: 'create.form',
     data: {
         name: 'top',
+        targetOrigin: '*',
         config: [
             {
                 component: 'username',
@@ -95,6 +95,9 @@ window.postMessage({
 ```
 
 > For this component you can see a custom config for the API, with a route and custom headers.
+
+:warning: **You must set a key `targetOrigin` inside the config, as we use [postMessage() API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage). It's important for the security.**
+`
 
 ## Build
 

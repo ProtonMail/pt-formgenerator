@@ -57,6 +57,9 @@ function validator(value, { required, maxlength, minlength, data: { success, dat
         };
     }
 
+    const isValidMinLength = minlength && minlength > value.length;
+    const isValidMaxLength = maxlength && maxlength < value.length;
+
     if (maxlength && maxlength < value.length) {
         state.errors.push(`Max length for a username is ${maxlength}`);
         state.classNames.push('input-error-maxlength');
@@ -66,7 +69,7 @@ function validator(value, { required, maxlength, minlength, data: { success, dat
         state.classNames.push('input-error-minlength');
     }
 
-    if (!/^((\w|\d)+(-|\w|\d)+)/.test(value)) {
+    if (!/^((\w|\d)+(-|\w|\d)+)/.test(value) && !isValidMinLength && !isValidMaxLength) {
         state.errors.push(`It must contains only letters/digits or - and start with a letter/digit`);
         state.classNames.push('input-error-pattern');
     }

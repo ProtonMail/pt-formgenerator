@@ -1,11 +1,13 @@
-*, *::after, *::before {
+*,
+*::after,
+*::before {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
     color: #555;
     font-size: 14px;
     font-weight: 400;
@@ -19,17 +21,18 @@ $border: #acb0bf;
 $color: #222;
 $link: #9397cd;
 
-input:not([type="checkbox"]):not([type="radio"]) {
-    padding: .5rem 1rem;
+input:not([type='checkbox']):not([type='radio']) {
+    padding: 0.5rem 1rem;
     border: 1px solid $border;
     border-radius: 4px;
-    box-shadow: inset 0 2px 5px rgba(0,0,0,.15);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.15);
     font-size: 1em;
     color: $color;
 }
 
-.error, .success {
-    padding: .8rem 1rem;
+.error,
+.success {
+    padding: 0.8rem 1rem;
     margin: 1rem 0;
     background: $error;
     border-radius: 4px;
@@ -55,22 +58,23 @@ input:not([type="checkbox"]):not([type="radio"]) {
     }
 
     button {
-        padding: .3rem 1rem;
+        padding: 0.3rem 1rem;
         margin: 0;
         border: 0;
         border-radius: 4px;
-        box-shadow: inset 0 0 0 1px #acb0bf, 0 1px 2px rgba(0,0,0,.1);
+        box-shadow: inset 0 0 0 1px #acb0bf, 0 1px 2px rgba(0, 0, 0, 0.1);
         background: #fff;
         color: $color;
         cursor: pointer;
 
-        &:hover, &:focus {
+        &:hover,
+        &:focus {
             background: #eee;
         }
     }
 
     button + button {
-        margin-left: .5rem
+        margin-left: 0.5rem;
     }
 }
 
@@ -80,21 +84,21 @@ input:not([type="checkbox"]):not([type="radio"]) {
 
     i {
         position: absolute;
-        right: .5em;
-        margin-top: .3rem;
+        right: 0.5em;
+        margin-top: 0.3rem;
         z-index: 2;
     }
 
     select {
         position: absolute;
         width: 100%;
-        padding: .55rem;
+        padding: 0.55rem;
         background: transparent;
         border: 0;
         border-radius: 2px;
         -webkit-appearance: none;
         appearance: none;
-        box-shadow: inset 0 0 0 1px #acb0bf, 0 1px 2px rgba(0,0,0,.1);
+        box-shadow: inset 0 0 0 1px #acb0bf, 0 1px 2px rgba(0, 0, 0, 0.1);
     }
 }
 
@@ -102,19 +106,20 @@ a {
     color: $link;
     text-decoration: none;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         color: $color;
         text-decoration: underline;
     }
 }
 
 .btn {
-    padding: .9rem 1.5rem;
+    padding: 0.9rem 1.5rem;
     border: 0;
     text-transform: uppercase;
-    box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: all .3s ease-out;
+    transition: all 0.3s ease-out;
 }
 
 .btn-submit {
@@ -122,13 +127,13 @@ a {
     color: #fff;
     font-size: 1.1em;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         background-color: #8286c5;
     }
 }
 
-[data-name="bottom"] {
-
+[data-name='bottom'] {
     .field-email {
         label {
             display: none;
@@ -150,21 +155,21 @@ a {
     }
 }
 
-[data-name="top"] {
-
+[data-name='top'] {
     .field-usernameInput {
         display: flex;
         flex-wrap: wrap;
 
-        .error, .success {
+        .error,
+        .success {
             width: 100%;
         }
     }
 
     .field-select {
         flex: 1;
-        margin-left: .5rem;
-    /*    right: 0;*/
+        margin-left: 0.5rem;
+        /*    right: 0;*/
         display: flex;
         align-items: center;
 
@@ -176,12 +181,12 @@ a {
         &::before {
             content: '@';
             width: 1rem;
-            margin-right: .5rem
+            margin-right: 0.5rem;
         }
     }
 
-    .field-usernameInput label, .field-select label {
+    .field-usernameInput label,
+    .field-select label {
         display: none;
     }
 }
-
