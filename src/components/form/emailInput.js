@@ -8,30 +8,38 @@ const REGEX_EMAIL = /(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\
 
 const callBridge = bridge('emailInput.info', ({ isError }) => ({ isError }));
 
-function validator(value) {
-    const state = {
-        value,
-        isError: false,
-        errors: [],
-        classNames: []
-    };
-
-    if (!value || !REGEX_EMAIL.test(value)) {
-        return {
-            ...state,
-            isError: true,
-            errors: ['Invalid email'],
-            classNames: ['input-error-email']
+function createValidator(errors = {}) {
+    function validator(value) {
+        const state = {
+            value,
+            isError: false,
+            errors: [],
+            classNames: []
         };
+
+        if (!value || !REGEX_EMAIL.test(value)) {
+            return {
+                ...state,
+                isError: true,
+                errors: [errors.PATTERN],
+                classNames: ['input-error-email']
+            };
+        }
+
+        return state;
     }
 
-    return state;
+    return validator;
 }
 const COMPONENT_CLASSNAME = 'field-email';
 
 export default class EmailInput extends Component {
+    constructor(props) {
+        super();
+        this.validator = createValidator(props.errors);
+    }
     validate(value, data) {
-        return validator(value);
+        return this.validator(value);
     }
 
     oninput({ target }) {

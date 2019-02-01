@@ -28,54 +28,58 @@ const callBridge = bridge('usernameInput.info', ({ suggestions = [], isError, is
     return { suggestions, isError, isAvailable };
 });
 
-function validator(value, { required, maxlength, minlength, data: { success, data: requestData = {} } = {} }) {
-    const state = {
-        value,
-        isError: false,
-        isAvailable: false,
-        errors: [],
-        classNames: [],
-        suggestions: undefined
-    };
-
-    if (required && !value) {
-        state.errors.push('You must set a username');
-        state.classNames.push('input-error-required');
-        return {
-            ...state,
-            isError: true
+function createValidator(errors = {}) {
+    function validator(value, { required, maxlength, minlength, data: { success, data: requestData = {} } = {} }) {
+        const state = {
+            value,
+            isError: false,
+            isAvailable: false,
+            errors: [],
+            classNames: [],
+            suggestions: undefined
         };
+
+        if (required && !value) {
+            state.errors.push(errors.REQUIRED);
+            state.classNames.push('input-error-required');
+            return {
+                ...state,
+                isError: true
+            };
+        }
+
+        if (success === false) {
+            return {
+                ...state,
+                isError: true,
+                errors: [requestData.Error],
+                classNames: ['input-error-username'],
+                suggestions: (requestData.Details || {}).Suggestions
+            };
+        }
+
+        const isValidMinLength = minlength && minlength > value.length;
+        const isValidMaxLength = maxlength && maxlength < value.length;
+
+        if (maxlength && maxlength < value.length) {
+            state.errors.push(errors.MAXLENGTH);
+            state.classNames.push('input-error-maxlength');
+        }
+        if (minlength && minlength > value.length) {
+            state.errors.push(errors.MINLENGTH);
+            state.classNames.push('input-error-minlength');
+        }
+
+        if (!/^((\w|\d)+(-|\w|\d)+)/.test(value) && !isValidMinLength && !isValidMaxLength) {
+            state.errors.push(errors.PATTERN);
+            state.classNames.push('input-error-pattern');
+        }
+        state.isError = !!state.errors.length;
+        state.isAvailable = success === true && !state.isError;
+        return state;
     }
 
-    if (success === false) {
-        return {
-            ...state,
-            isError: true,
-            errors: [requestData.Error],
-            classNames: ['input-error-username'],
-            suggestions: (requestData.Details || {}).Suggestions
-        };
-    }
-
-    const isValidMinLength = minlength && minlength > value.length;
-    const isValidMaxLength = maxlength && maxlength < value.length;
-
-    if (maxlength && maxlength < value.length) {
-        state.errors.push(`Max length for a username is ${maxlength}`);
-        state.classNames.push('input-error-maxlength');
-    }
-    if (minlength && minlength > value.length) {
-        state.errors.push(`Min length for a username is ${minlength}`);
-        state.classNames.push('input-error-minlength');
-    }
-
-    if (!/^((\w|\d)+(-|\w|\d)+)/.test(value) && !isValidMinLength && !isValidMaxLength) {
-        state.errors.push(`It must contains only letters/digits or - and start with a letter/digit`);
-        state.classNames.push('input-error-pattern');
-    }
-    state.isError = !!state.errors.length;
-    state.isAvailable = success === true && !state.isError;
-    return state;
+    return validator;
 }
 
 export default class UsernameInput extends Component {
@@ -89,10 +93,11 @@ export default class UsernameInput extends Component {
         }
 
         request = props.api;
+        this.validator = createValidator(props.errors);
     }
     validate(value, data) {
         const { required, maxlength, minlength } = this.props;
-        return validator(value, { required, maxlength, minlength, data });
+        return this.validator(value, { required, maxlength, minlength, data });
     }
 
     oninput({ target }) {
@@ -149,7 +154,7 @@ export default class UsernameInput extends Component {
     render({ domains, ...props }) {
         return (
             <LabelInputField
-                {...omit(props, ['maxlength', 'minlength', 'api'])}
+                {...omit(props, ['errors', 'maxlength', 'minlength', 'api'])}
                 value={this.state.custom || this.state.value}
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}

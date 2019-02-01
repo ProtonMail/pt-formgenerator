@@ -19,7 +19,7 @@ const cb = ({ data: { type, data = {} } = {} }) => {
         console.log('[CONFIG]', data.config);
 
         if (!data.targetOrigin) {
-            throw new Error('You must define an envUrl in order to scope postMessage()');
+            throw new Error('You must define a [targetOrigin] in order to scope postMessage()');
         }
 
         setEnvUrl(data.targetOrigin);
@@ -33,4 +33,4 @@ window.addEventListener('message', cb, false);
 
 /* START.DEV_ONLY */
 envTest();
-/* END.DEV_ONLY  */
+/* END.DEV_ONLY */
