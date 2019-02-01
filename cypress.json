@@ -1,0 +1,5 @@
+{
+    "env": {
+        "server": "http://localhost:1234"
+    }
+}

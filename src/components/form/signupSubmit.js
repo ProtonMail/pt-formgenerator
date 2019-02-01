@@ -16,7 +16,7 @@ function signupSubmit({ messages, button, iframeName }) {
                 .
             </p>
 
-            <button type="submit" onclick={() => submit({}, { iframeName })} class="btn btn-submit">
+            <button type="submit" class="btn btn-submit" name="submitBtn" onclick={() => submit({}, { iframeName })}>
                 {button.label}
             </button>
 
