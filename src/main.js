@@ -1,6 +1,11 @@
 import { h, render } from 'preact';
+
 import App from './App';
-// import './dev/env';
+import { setEnvUrl } from './lib/bridge';
+
+/* START.DEV_ONLY */
+import envTest from './dev/env';
+/* END.DEV_ONLY */
 
 const node = document.getElementById('app');
 
@@ -12,6 +17,12 @@ const matchIframe = (name) => {
 const cb = ({ data: { type, data = {} } = {} }) => {
     if (type === 'create.form' && matchIframe(data.name)) {
         console.log('[CONFIG]', data.config);
+
+        if (!data.targetOrigin) {
+            throw new Error('You must define an envUrl in order to scope postMessage()');
+        }
+
+        setEnvUrl(data.targetOrigin);
         render(<App config={data.config} name={data.name} />, node, node.lastChild);
         node.setAttribute('data-name', data.name);
         window.removeEventListener('message', cb, false);
@@ -19,3 +30,7 @@ const cb = ({ data: { type, data = {} } = {} }) => {
 };
 
 window.addEventListener('message', cb, false);
+
+/* START.DEV_ONLY */
+envTest();
+/* END.DEV_ONLY  */

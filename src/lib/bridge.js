@@ -1,5 +1,7 @@
 const noop = () => {};
 
+let URL_ENV = '*';
+
 /**
  * Create a bridge to pass some informations to the parent of the iframe
  * based on state and props.
@@ -14,14 +16,20 @@ const callApp = (type, formatState = noop) => {
     const extratIframeName = ({ iframeName: name } = {}) => ({ name });
 
     return (state = {}, props = {}) => {
-        window.parent.postMessage({
-            type,
-            data: {
-                ...extratIframeName(props),
-                ...formatState(state, props)
-            }
-        });
+        console.log({ URL_ENV });
+        window.parent.postMessage(
+            {
+                type,
+                data: {
+                    ...extratIframeName(props),
+                    ...formatState(state, props)
+                }
+            },
+            URL_ENV
+        );
     };
 };
+
+export const setEnvUrl = (url) => (URL_ENV = url);
 
 export default callApp;
