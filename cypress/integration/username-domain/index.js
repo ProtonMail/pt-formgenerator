@@ -100,17 +100,17 @@ context('Test username domain component', () => {
             getNode('error').should('not.exist');
         });
 
-        it('displays a maxerror error if value > 10', () => {
+        it('displays a maxerror error if value > 15', () => {
             const input = getNode('username');
             input.clear();
-            input.type('apokewofkweopfkweopfkwep');
+            input.type('apokewofkweopfewfewfwefkweopfkwep');
             input.blur();
 
             const node = getNode('error');
             node.should('exist');
 
             node.invoke('text').then((txt) => {
-                expect(txt).to.eq('Max length for a username is 10');
+                expect(txt).to.eq('Max length for a username is 15');
             });
         });
 

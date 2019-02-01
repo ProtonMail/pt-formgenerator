@@ -1,5 +1,17 @@
 import '../App.scss';
 
+const ERRORS = {
+    USERNAME: {
+        REQUIRED: 'You must set a username',
+        MAXLENGTH: 'Max length for a username is 15',
+        MINLENGTH: 'Min length for a username is 3',
+        PATTERN: 'It must contains only letters/digits or - and start with a letter/digit'
+    },
+    EMAIL: {
+        PATTERN: 'Invalid email'
+    }
+};
+
 function main() {
     console.log('TRIGGER ACTION');
     window.postMessage(
@@ -14,7 +26,8 @@ function main() {
                         label: 'Add a recovery email',
                         placeholder: 'Recovery Email',
                         type: 'email',
-                        name: 'notificationEmail'
+                        name: 'notificationEmail',
+                        errors: ERRORS.EMAIL
                     },
                     {
                         component: 'signupSubmit',
@@ -48,6 +61,7 @@ function main() {
                         minlength: 3,
                         required: true,
                         name: 'username',
+                        errors: ERRORS.USERNAME,
                         api: {
                             url: 'https://protonmail.blue/api/users/available',
                             headers: {
