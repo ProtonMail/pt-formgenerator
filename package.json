@@ -9,7 +9,7 @@
     "start": "parcel src/index.html",
     "build": "del dist && rollup -c --sourcemap && sass src/App.scss | postcss > dist/main.css;",
     "preversion": "git update-index --no-assume-unchanged package-lock.json",
-    "postversion": "git update-index --assume-unchanged package-lock.json"
+    "postversion": "git update-index --assume-unchanged package-lock.json && git push --tags"
   },
   "author": "",
   "license": "ISC",
