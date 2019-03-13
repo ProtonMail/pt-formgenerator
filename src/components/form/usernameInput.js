@@ -1,7 +1,6 @@
 import { h, render, Component } from 'preact';
 import debounce from 'lodash/debounce';
 import omit from 'lodash/omit';
-import 'unfetch/polyfill';
 
 import LabelInputField from './labelInputField';
 import Select from './select';
@@ -11,38 +10,12 @@ const COMPONENT_CLASSNAME = 'field-usernameInput';
 
 let request = {};
 
-/**
- * We need to run this request when we init the component.
- * Quick and dirty poc to validate the code with live API
- * @return {[type]} [description]
- */
-const loadCookieRequest = () => {
-    const { url, headers } = request;
-
-    return fetch(`${url}/direct`, { headers })
-        .then((response) => {
-            return response.json().then((data) => {
-                return {
-                    success: response.ok,
-                    data
-                };
-            });
-        })
-        .then(console.log)
-        .catch(console.error);
-};
-const getUserName = (value) => {
-    const { url, headers } = request;
-
-    return fetch(`${url}/available?Name=${value}`, { headers }).then((response) => {
-        return response.json().then((data) => {
-            return {
-                success: response.ok,
-                data
-            };
-        });
-    });
-};
+const callBridgeUserName = bridge('usernameInput.request', ({ value }) => {
+    return {
+        type: 'available',
+        queryParam: { Name: value }
+    };
+});
 
 const callBridge = bridge('usernameInput.info', ({ suggestions = [], isError, isAvailable } = {}) => {
     return { suggestions, isError, isAvailable };
@@ -114,8 +87,34 @@ export default class UsernameInput extends Component {
 
         request = props.api;
         this.validator = createValidator(props.errors);
-        loadCookieRequest();
+        this.onMessage = this.onMessage.bind(this);
     }
+
+    componentDidMount() {
+        window.addEventListener('message', this.onMessage, false);
+    }
+
+    componentWillUnmount() {
+        window.rempoveEventListener('message', this.onMessage, false);
+    }
+
+    onMessage({ data: { type, data = {}, value } }) {
+        console.log({ type, data, value });
+        if (type === 'usernameInput.query') {
+            const state = this.validate(value, data);
+
+            // Always inform the parent that we made a change
+            callBridge(state, this.props);
+
+            // Erase old custom value if success
+            this.setState({
+                isAvailable: data.success,
+                // custom: data.success ? '' : this.state.custom,
+                ...state
+            });
+        }
+    }
+
     validate(value, data) {
         const { required, maxlength, minlength } = this.props;
         return this.validator(value, { required, maxlength, minlength, data });
@@ -144,19 +143,7 @@ export default class UsernameInput extends Component {
             return console.log('--- no change --');
         }
 
-        getUserName(value).then((data) => {
-            const state = this.validate(value, data);
-
-            // Always inform the parent that we made a change
-            callBridge(state, this.props);
-
-            // Erase old custom value if success
-            this.setState({
-                isAvailable: data.success,
-                // custom: data.success ? '' : this.state.custom,
-                ...state
-            });
-        });
+        callBridgeUserName({ value }, this.props);
     }
 
     chooseSuggestion(value) {
