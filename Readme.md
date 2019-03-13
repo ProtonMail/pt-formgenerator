@@ -1,8 +1,10 @@
 Tested with:
 - Node.js `v11.6.0`
-- npm `6.5.0-next.0` ┐(‘～`；)┌
+- npm `6.7.0
 
 Before you start: `$ npm i`.
+
+**Broken CI - 03/2019** _Because of the last patch to control the API via the bridge the CI is dead. To fix it we need to wait for the webapp release, to test it against live API, or a custom bridge_
 
 ## Dev
 
