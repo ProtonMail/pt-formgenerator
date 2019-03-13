@@ -11,10 +11,30 @@ const COMPONENT_CLASSNAME = 'field-usernameInput';
 
 let request = {};
 
+/**
+ * We need to run this request when we init the component.
+ * Quick and dirty poc to validate the code with live API
+ * @return {[type]} [description]
+ */
+const loadCookieRequest = () => {
+    const { url, headers } = request;
+
+    return fetch(`${url}/direct`, { headers })
+        .then((response) => {
+            return response.json().then((data) => {
+                return {
+                    success: response.ok,
+                    data
+                };
+            });
+        })
+        .then(console.log)
+        .catch(console.error);
+};
 const getUserName = (value) => {
     const { url, headers } = request;
 
-    return fetch(url + `?Name=${value}`, { headers }).then((response) => {
+    return fetch(`${url}/available?Name=${value}`, { headers }).then((response) => {
         return response.json().then((data) => {
             return {
                 success: response.ok,
@@ -94,6 +114,7 @@ export default class UsernameInput extends Component {
 
         request = props.api;
         this.validator = createValidator(props.errors);
+        loadCookieRequest();
     }
     validate(value, data) {
         const { required, maxlength, minlength } = this.props;
