@@ -1,6 +1,6 @@
 {
   "name": "iframe-form",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -53,7 +53,9 @@
       "prettier --write",
       "git add"
     ],
-    "ignore": ["dist/*"]
+    "ignore": [
+      "dist/*"
+    ]
   },
   "husky": {
     "hooks": {
