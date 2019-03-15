@@ -9,8 +9,8 @@
     "start": "parcel src/index.html",
     "lint": "eslint src --ext .js --quiet --cache",
     "build": "del dist && rollup -c --sourcemap && sass src/App.scss | postcss > dist/main.css;",
-    "preversion": "git update-index --no-assume-unchanged package-lock.json",
-    "postversion": "git update-index --assume-unchanged package-lock.json && git push --tags"
+    "preversion": "git update-index --no-assume-unchanged package-lock.json && npm run build && git add dist",
+    "postversion": "git update-index --assume-unchanged package-lock.json && git push --tags && git push"
   },
   "author": "",
   "license": "ISC",
@@ -49,10 +49,11 @@
       "prettier --write",
       "git add"
     ],
-    "*.yaml": [
+    "*.yml": [
       "prettier --write",
       "git add"
-    ]
+    ],
+    "ignore": ["dist/*"]
   },
   "husky": {
     "hooks": {
