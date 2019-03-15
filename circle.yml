@@ -4,7 +4,6 @@ orbs:
 workflows:
     build:
         jobs:
-            - run: npm run lint
             - cypress/run:
                   record: false
-                  start: 'npm start'
+                  start: 'npm run lint && npm start'
