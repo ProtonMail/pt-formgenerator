@@ -1,5 +1,5 @@
 {
-  "name": "iframe-form",
+  "name": "pt-formgenerator",
   "version": "1.2.1",
   "description": "",
   "main": "index.js",
@@ -9,10 +9,10 @@
     "start": "parcel src/index.html",
     "lint": "eslint src --ext .js --quiet --cache",
     "build": "del dist && rollup -c --sourcemap && sass src/App.scss | postcss > dist/main.css;",
-    "preversion": "git update-index --no-assume-unchanged package-lock.json && npm run build && git add dist",
-    "postversion": "git update-index --assume-unchanged package-lock.json && git push --tags && git push"
+    "preversion": "git update-index --no-assume-unchanged package-lock.json && git update-index --no-assume-unchanged $(git ls-files dist | tr '\n' ' ') && npm run build && git add dist",
+    "postversion": "git update-index --assume-unchanged package-lock.json && git update-index --assume-unchanged $(git ls-files dist | tr '\n' ' ') && git push --tags && git push"
   },
-  "author": "",
+  "author": "ProtonMail",
   "license": "ISC",
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -41,18 +41,20 @@
     "preact": "^8.4.2"
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.scss": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.yml": [
-      "prettier --write",
-      "git add"
-    ],
+    "linters": {
+      "*.js": [
+        "prettier --write",
+        "git add"
+      ],
+      "*.scss": [
+        "prettier --write",
+        "git add"
+      ],
+      "*.yml": [
+        "prettier --write",
+        "git add"
+      ]
+    },
     "ignore": [
       "dist/*"
     ]
