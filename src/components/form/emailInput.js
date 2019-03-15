@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce';
 
 import LabelInputField from './labelInputField';
 import bridge from '../../lib/bridge';
-import emailValidator from './validators/username';
+import emailValidator from './validators/email';
 
 const COMPONENT_CLASSNAME = 'field-email';
 const callBridgeStateInput = bridge('emailInput.info', ({ isError }) => ({ isError }));
