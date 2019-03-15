@@ -3,13 +3,16 @@ import debounce from 'lodash/debounce';
 import omit from 'lodash/omit';
 
 import LabelInputField from './labelInputField';
+import usernameValidator from './validators/username';
 import Select from './select';
 import bridge from '../../lib/bridge';
 
 const COMPONENT_CLASSNAME = 'field-usernameInput';
 
-let request = {};
-
+/**
+ * Call the app to ask for a network request.
+ * @param  {String} 'usernameInput.request' name of the event
+ */
 const callBridgeUserName = bridge('usernameInput.request', ({ value }) => {
     return {
         type: 'available',
@@ -17,76 +20,18 @@ const callBridgeUserName = bridge('usernameInput.request', ({ value }) => {
     };
 });
 
-const callBridge = bridge('usernameInput.info', ({ suggestions = [], isError, isAvailable } = {}) => {
+/**
+ * Inform the app about the input's state
+ * @param  {String} 'usernameInput.info' name of the event
+ */
+const callBridgeStateInput = bridge('usernameInput.info', ({ suggestions = [], isError, isAvailable } = {}) => {
     return { suggestions, isError, isAvailable };
 });
-
-function createValidator(errors = {}) {
-    function validator(value, { required, maxlength, minlength, data: { success, data: requestData = {} } = {} }) {
-        const state = {
-            value,
-            isError: false,
-            isAvailable: false,
-            errors: [],
-            classNames: [],
-            suggestions: undefined
-        };
-
-        if (required && !value) {
-            state.errors.push(errors.REQUIRED);
-            state.classNames.push('input-error-required');
-            return {
-                ...state,
-                isError: true
-            };
-        }
-
-        if (success === false) {
-            return {
-                ...state,
-                isError: true,
-                errors: [requestData.Error],
-                classNames: ['input-error-username'],
-                suggestions: (requestData.Details || {}).Suggestions
-            };
-        }
-
-        const isValidMinLength = minlength && minlength > value.length;
-        const isValidMaxLength = maxlength && maxlength < value.length;
-
-        if (maxlength && maxlength < value.length) {
-            state.errors.push(errors.MAXLENGTH);
-            state.classNames.push('input-error-maxlength');
-        }
-        if (minlength && minlength > value.length) {
-            state.errors.push(errors.MINLENGTH);
-            state.classNames.push('input-error-minlength');
-        }
-
-        if (!/^((\w|\d)+(-|\w|\d)+)/.test(value) && !isValidMinLength && !isValidMaxLength) {
-            state.errors.push(errors.PATTERN);
-            state.classNames.push('input-error-pattern');
-        }
-        state.isError = !!state.errors.length;
-        state.isAvailable = success === true && !state.isError;
-        return state;
-    }
-
-    return validator;
-}
 
 export default class UsernameInput extends Component {
     constructor(props) {
         super();
-
-        if (!props.api) {
-            throw new Error(
-                'You configure a custom API for this component\n\n --> { url:<String>, headers:<Object> }\n'
-            );
-        }
-
-        request = props.api;
-        this.validator = createValidator(props.errors);
+        this.validator = usernameValidator(props.errors);
         this.onMessage = this.onMessage.bind(this);
     }
 
@@ -99,12 +44,12 @@ export default class UsernameInput extends Component {
     }
 
     onMessage({ data: { type, data = {}, value } }) {
-        console.log({ type, data, value });
+        // Coming from the webapp
         if (type === 'usernameInput.query') {
             const state = this.validate(value, data);
 
             // Always inform the parent that we made a change
-            callBridge(state, this.props);
+            callBridgeStateInput(state, this.props);
 
             // Erase old custom value if success
             this.setState({
@@ -115,12 +60,21 @@ export default class UsernameInput extends Component {
         }
     }
 
+    /**
+     * Validate an input value
+     *     You can pass an API response as 2sd arg to provide more informations:
+     *     ({ data: Object, success: true }))
+     *     -> data = Response object from api request
+     * @param  {String} value Input's value
+     * @param  {Object} data  API response from the app
+     * @return {Object}
+     */
     validate(value, data) {
         const { required, maxlength, minlength } = this.props;
         return this.validator(value, { required, maxlength, minlength, data });
     }
 
-    oninput({ target }) {
+    onInput({ target }) {
         const value = target.value || '';
         const state = this.validate(value);
 
@@ -130,12 +84,12 @@ export default class UsernameInput extends Component {
         }
 
         if (this.state.isError !== state.isError) {
-            callBridge(state, this.props);
+            callBridgeStateInput(state, this.props);
         }
 
         return this.setState(state);
     }
-    onchange({ target }) {
+    onChange({ target }) {
         const value = target.value || '';
 
         // Don't perform the validation of the username if no changes or already isError
@@ -155,7 +109,7 @@ export default class UsernameInput extends Component {
             classNames: [],
             isError: false
         };
-        callBridge(state, this.props);
+        callBridgeStateInput(state, this.props);
         this.setState(state);
     }
 
@@ -166,8 +120,8 @@ export default class UsernameInput extends Component {
                 value={this.state.custom || this.state.value}
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}
-                oninput={debounce(this.oninput.bind(this), 200)}
-                onchange={debounce(this.onchange.bind(this), 300)}
+                onInput={debounce(this.onInput.bind(this), 200)}
+                onChange={debounce(this.onChange.bind(this), 300)}
             >
                 <Select {...domains} />
 
@@ -183,7 +137,7 @@ export default class UsernameInput extends Component {
                     <div class="suggestions">
                         <h4>Available usernames:</h4>
                         {this.state.suggestions.map((name) => (
-                            <button type="button" onclick={() => this.chooseSuggestion(name)}>
+                            <button type="button" onClick={() => this.chooseSuggestion(name)}>
                                 {name}
                             </button>
                         ))}

@@ -16,7 +16,6 @@ const callApp = (type, formatState = noop) => {
     const extratIframeName = ({ iframeName: name } = {}) => ({ name });
 
     return (state = {}, props = {}) => {
-        console.log({ URL_ENV });
         window.parent.postMessage(
             {
                 type,

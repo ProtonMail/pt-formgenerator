@@ -1,6 +1,6 @@
 Tested with:
 - Node.js `v11.6.0`
-- npm `6.7.0
+- npm `6.7.0`
 
 Before you start: `$ npm i`.
 

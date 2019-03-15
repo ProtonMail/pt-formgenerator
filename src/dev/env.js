@@ -62,13 +62,6 @@ function main() {
                         required: true,
                         name: 'username',
                         errors: ERRORS.USERNAME,
-                        api: {
-                            url: 'https://mail.protonmail.com/api/users/available',
-                            headers: {
-                                'x-pm-apiversion': 3,
-                                'x-pm-appversion': 'Web_3.15.13'
-                            }
-                        },
                         domains: {
                             component: 'domains',
                             label: 'Select a domain',
