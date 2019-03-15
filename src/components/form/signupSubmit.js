@@ -1,10 +1,12 @@
-import { h, render } from 'preact';
+import { h } from 'preact';
 
 import bridge from '../../lib/bridge';
 
 const callBridgeSubmit = bridge('submit.init');
 
 function signupSubmit({ messages, button, iframeName }) {
+    const onClick = () => callBridgeSubmit({}, { iframeName });
+
     return (
         <footer class="signupSubmit">
             <p>
@@ -16,12 +18,7 @@ function signupSubmit({ messages, button, iframeName }) {
                 .
             </p>
 
-            <button
-                type="submit"
-                class="btn btn-submit"
-                name="submitBtn"
-                onclick={() => callBridgeSubmit({}, { iframeName })}
-            >
+            <button type="submit" class="btn btn-submit" name="submitBtn" onClick={onClick}>
                 {button.label}
             </button>
 

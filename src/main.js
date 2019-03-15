@@ -16,8 +16,6 @@ const matchIframe = (name) => {
 
 const cb = ({ data: { type, data = {} } = {} }) => {
     if (type === 'create.form' && matchIframe(data.name)) {
-        console.log('[CONFIG]', data.config);
-
         if (!data.targetOrigin) {
             throw new Error('You must define a [targetOrigin] in order to scope postMessage()');
         }

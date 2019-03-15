@@ -1,4 +1,4 @@
-import { h, render } from 'preact';
+import { h } from 'preact';
 
 const getClassNames = (start, extend) => [start, extend].filter(Boolean).join(' ');
 

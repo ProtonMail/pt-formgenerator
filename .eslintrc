@@ -1,0 +1,11 @@
+{
+    "extends": "eslint-config-synacor",
+    "rules": {
+        "indent": ["error", 4],
+        "lines-around-comment": [0],
+        "react/jsx-indent-props": [2, 4],
+        "react/jsx-no-target-blank": [1],
+        "react/jsx-no-bind": [0],
+        "react/sort-comp": [0]
+    }
+}

@@ -1,4 +1,4 @@
-import { h, render, Component } from 'preact';
+import { h, Component } from 'preact';
 import debounce from 'lodash/debounce';
 
 import LabelInputField from './labelInputField';

@@ -1,4 +1,4 @@
-import { h, render } from 'preact';
+import { h } from 'preact';
 
 function select({ label, children, options = [], ...attributes }) {
     return (

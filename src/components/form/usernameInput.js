@@ -1,4 +1,4 @@
-import { h, render, Component } from 'preact';
+import { h, Component } from 'preact';
 import debounce from 'lodash/debounce';
 import omit from 'lodash/omit';
 
@@ -13,20 +13,20 @@ const COMPONENT_CLASSNAME = 'field-usernameInput';
  * Call the app to ask for a network request.
  * @param  {String} 'usernameInput.request' name of the event
  */
-const callBridgeUserName = bridge('usernameInput.request', ({ value }) => {
-    return {
-        type: 'available',
-        queryParam: { Name: value }
-    };
-});
+const callBridgeUserName = bridge('usernameInput.request', ({ value }) => ({
+    type: 'available',
+    queryParam: { Name: value }
+}));
 
 /**
  * Inform the app about the input's state
  * @param  {String} 'usernameInput.info' name of the event
  */
-const callBridgeStateInput = bridge('usernameInput.info', ({ suggestions = [], isError, isAvailable } = {}) => {
-    return { suggestions, isError, isAvailable };
-});
+const callBridgeStateInput = bridge('usernameInput.info', ({ suggestions = [], isError, isAvailable } = {}) => ({
+    suggestions,
+    isError,
+    isAvailable
+}));
 
 export default class UsernameInput extends Component {
     constructor(props) {
