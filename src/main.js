@@ -1,7 +1,7 @@
 import { h, render } from 'preact';
 
 import App from './App';
-import { setEnvUrl, testOrigin } from './lib/bridge';
+import { setEnvUrl, setAppEnvUrl, testOrigin } from './lib/bridge';
 
 /* START.DEV_ONLY */
 import envTest from './dev/env';
@@ -25,6 +25,7 @@ const cb = ({ origin, data: { type, data = {} } = {} }) => {
         }
 
         setEnvUrl(origin);
+        setAppEnvUrl(data.targetOrigin);
         render(<App config={data.config} name={data.name} />, node, node.lastChild);
         node.setAttribute('data-name', data.name);
         window.removeEventListener('message', cb, false);

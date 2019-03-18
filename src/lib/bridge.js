@@ -1,6 +1,7 @@
 const noop = () => {};
 
 const CONFIG = {
+    APP_URL_ENV: '',
     URL_ENV: '*'
 };
 
@@ -27,6 +28,11 @@ const callApp = (type, formatState = noop) => {
     const extratIframeName = ({ iframeName: name } = {}) => ({ name });
 
     return (state = {}, props = {}) => {
+        console.log('[APP ENV]', CONFIG);
+
+        if (window.location.origin !== CONFIG.URL_ENV) {
+            return console.error('You try to contact the wrong URL', CONFIG.URL_ENV);
+        }
         window.parent.postMessage(
             {
                 type,
@@ -35,11 +41,12 @@ const callApp = (type, formatState = noop) => {
                     ...formatState(state, props)
                 }
             },
-            CONFIG.URL_ENV
+            CONFIG.APP_URL_ENV
         );
     };
 };
 
 export const setEnvUrl = (url) => (CONFIG.URL_ENV = url);
+export const setAppEnvUrl = (url) => (CONFIG.APP_URL_ENV = url);
 
 export default callApp;
