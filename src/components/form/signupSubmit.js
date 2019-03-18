@@ -2,10 +2,10 @@ import { h } from 'preact';
 
 import bridge from '../../lib/bridge';
 
-const callBridgeSubmit = bridge('submit.init');
+const callBridgeSubmit = bridge('submit.init', (item) => item);
 
-function signupSubmit({ messages, button, iframeName }) {
-    const onClick = () => callBridgeSubmit({}, { iframeName });
+function signupSubmit({ messages, button, iframeName, fallback }) {
+    const onClick = () => callBridgeSubmit({ fallback }, { iframeName });
 
     return (
         <footer class="signupSubmit">

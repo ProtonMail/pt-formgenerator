@@ -1,7 +1,7 @@
 import { h, render } from 'preact';
 
 import App from './App';
-import { setEnvUrl, setAppEnvUrl, testOrigin } from './lib/bridge';
+import bridge, { setEnvUrl, setAppEnvUrl, testOrigin } from './lib/bridge';
 
 /* START.DEV_ONLY */
 import envTest from './dev/env';
@@ -9,12 +9,34 @@ import envTest from './dev/env';
 
 const node = document.getElementById('app');
 
+/**
+ * Create custom config with <name> => value based on inputs/select etc.
+ * @param  {Array} nodes Array of nodes
+ * @return {Object}      { inputs: <Object>, selects: <Object> }
+ */
+const getConfig = (nodes) => {
+    return nodes.reduce(
+        (acc, node) => {
+            if (node.nodeName === 'SELECT') {
+                acc.selects[node.name] = node[node.selectedIndex].value;
+                return acc;
+            }
+            acc.inputs[node.name] = node.value;
+            return acc;
+        },
+        {
+            inputs: Object.create(null),
+            selects: Object.create(null)
+        }
+    );
+};
+
 const matchIframe = (name) => {
     const url = window.location.search || '';
     return url.includes(`name=${name}`);
 };
 
-const cb = ({ origin, data: { type, data = {} } = {} }) => {
+const cb = ({ origin, data: { type, data = {}, fallback = false } = {} }) => {
     if (type === 'create.form' && matchIframe(data.name)) {
         if (!origin) {
             throw new Error('You must define a [targetOrigin] in order to scope postMessage()');
@@ -26,9 +48,22 @@ const cb = ({ origin, data: { type, data = {} } = {} }) => {
 
         setEnvUrl(origin);
         setAppEnvUrl(data.targetOrigin);
-        render(<App config={data.config} name={data.name} />, node, node.lastChild);
+        render(<App config={data.config} name={data.name} fallback={fallback} />, node, node.lastChild);
         node.setAttribute('data-name', data.name);
-        window.removeEventListener('message', cb, false);
+        !fallback && window.removeEventListener('message', cb, false);
+    }
+
+    // Fallback mode, we extract the values from iframes and sent it back to the app
+    if (type === 'submit.broadcast' && fallback) {
+        const callBridge = bridge('child.message.data', (item) => item);
+        callBridge(
+            {
+                id: '{{id}}',
+                form: getConfig([...document.querySelectorAll('input, select')])
+            },
+            { iframeName: node.getAttribute('data-name') }
+        );
+        setTimeout(() => window.removeEventListener('message', cb, false), 100);
     }
 };
 

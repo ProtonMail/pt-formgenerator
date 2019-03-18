@@ -5,9 +5,14 @@ const CONFIG = {
     URL_ENV: '*'
 };
 
-export function testOrigin(sourceUrl) {
-    const keys = sourceUrl.split('.');
-    const values = keys.length === 2 ? keys[0] : keys[1];
+/**
+ * Check if we talk to the right iframe
+ *   - subdomain of protonmail
+ *   - localhost dev server (ex: localhost:8080)
+ * @param  {String} sourceUrl
+ * @return {Boolean}           True if it's ok
+ */
+export function testOrigin(sourceUrl = '') {
     if (/localhost:\d{4}$/.test(sourceUrl)) {
         return true;
     }
@@ -28,8 +33,6 @@ const callApp = (type, formatState = noop) => {
     const extratIframeName = ({ iframeName: name } = {}) => ({ name });
 
     return (state = {}, props = {}) => {
-        console.log('[APP ENV]', CONFIG);
-
         if (window.location.origin !== CONFIG.URL_ENV) {
             return console.error('You try to contact the wrong URL', CONFIG.URL_ENV);
         }

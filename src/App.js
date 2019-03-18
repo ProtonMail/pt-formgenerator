@@ -7,7 +7,7 @@ import SignupSubmit from './components/form/signupSubmit';
 import Select from './components/form/select';
 
 export default class App extends Component {
-    render({ config, name }) {
+    render({ config, name, fallback }) {
         return (
             <div class="formList">
                 {config.map(({ component, ...input }) => {
@@ -21,7 +21,7 @@ export default class App extends Component {
                         return <EmailInput {...input} iframeName={name} />;
                     }
                     if (component === 'signupSubmit') {
-                        return <SignupSubmit {...input} iframeName={name} />;
+                        return <SignupSubmit {...input} iframeName={name} fallback={fallback} />;
                     }
                     return <LabelInputField {...input} iframeName={name} />;
                 })}
