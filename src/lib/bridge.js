@@ -1,6 +1,17 @@
 const noop = () => {};
 
-let URL_ENV = '*';
+const CONFIG = {
+    URL_ENV: '*'
+};
+
+export function testOrigin(sourceUrl) {
+    const keys = sourceUrl.split('.');
+    const values = keys.length === 2 ? keys[0] : keys[1];
+    if (/localhost:\d{4}$/.test(sourceUrl)) {
+        return true;
+    }
+    return /protonmail/.test(sourceUrl);
+}
 
 /**
  * Create a bridge to pass some informations to the parent of the iframe
@@ -24,11 +35,11 @@ const callApp = (type, formatState = noop) => {
                     ...formatState(state, props)
                 }
             },
-            URL_ENV
+            CONFIG.URL_ENV
         );
     };
 };
 
-export const setEnvUrl = (url) => (URL_ENV = url);
+export const setEnvUrl = (url) => (CONFIG.URL_ENV = url);
 
 export default callApp;

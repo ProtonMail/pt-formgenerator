@@ -5,7 +5,7 @@ import omit from 'lodash/omit';
 import LabelInputField from './labelInputField';
 import usernameValidator from './validators/username';
 import Select from './select';
-import bridge from '../../lib/bridge';
+import bridge, { testOrigin } from '../../lib/bridge';
 
 const COMPONENT_CLASSNAME = 'field-usernameInput';
 
@@ -43,7 +43,11 @@ export default class UsernameInput extends Component {
         window.rempoveEventListener('message', this.onMessage, false);
     }
 
-    onMessage({ data: { type, data = {}, value } }) {
+    onMessage({ origin, data: { type, data = {}, value } }) {
+        if (!testOrigin(origin)) {
+            throw new Error('Wrong targetOrigin set' + origin);
+        }
+
         // Coming from the webapp
         if (type === 'usernameInput.query') {
             const state = this.validate(value, data);
