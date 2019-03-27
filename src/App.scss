@@ -85,8 +85,8 @@ input:not([type='checkbox']):not([type='radio']) {
     i {
         position: absolute;
         right: 0.5em;
-        margin-top: 0.3rem;
         z-index: 2;
+        transform: translateY(50%);
     }
 
     select {

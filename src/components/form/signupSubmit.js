@@ -4,7 +4,7 @@ import bridge from '../../lib/bridge';
 
 const callBridgeSubmit = bridge('submit.init', (item) => item);
 
-function signupSubmit({ messages, button, iframeName, fallback }) {
+function signupSubmit({ messages, button, iframeName, baseUrl, fallback }) {
     const onClick = () => callBridgeSubmit({ fallback }, { iframeName });
 
     return (
@@ -22,7 +22,7 @@ function signupSubmit({ messages, button, iframeName, fallback }) {
                 {button.label}
             </button>
 
-            <a href="/login" class="link">
+            <a href={`${baseUrl}/login`} class="link" target="_parent">
                 {messages.alreadyUser}
             </a>
         </footer>
