@@ -51,6 +51,10 @@ const cb = ({ origin, data: { type, data = {}, fallback = false } = {} }) => {
         render(<App config={data.config} name={data.name} fallback={fallback} />, node, node.lastChild);
         node.setAttribute('data-name', data.name);
         !fallback && window.removeEventListener('message', cb, false);
+
+        // Give to the parent app, we're ready. ex: to have a loader
+        const callBridge = bridge('app.loaded', (item) => item);
+        callBridge({}, { iframeName: node.getAttribute('data-name') });
     }
 
     // Fallback mode, we extract the values from iframes and sent it back to the app
