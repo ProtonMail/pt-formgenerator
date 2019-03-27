@@ -4,6 +4,15 @@
     box-sizing: border-box;
 }
 
+@keyframes load8 {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -13,6 +22,7 @@ body {
     font-weight: 400;
 }
 
+$info: #f4f4f4;
 $success: #a6cc93;
 $successTxt: #2a411f;
 $error: #cc9393;
@@ -30,6 +40,7 @@ input:not([type='checkbox']):not([type='radio']) {
     color: $color;
 }
 
+.info,
 .error,
 .success {
     padding: 0.8rem 1rem;
@@ -42,6 +53,11 @@ input:not([type='checkbox']):not([type='radio']) {
         padding: 0;
         margin: 0;
     }
+}
+
+.info {
+    background-color: $info;
+    color: $color;
 }
 
 .success {
@@ -76,6 +92,34 @@ input:not([type='checkbox']):not([type='radio']) {
     button + button {
         margin-left: 0.5rem;
     }
+}
+
+.loaderContainer {
+    display: flex;
+    align-items: center;
+}
+
+.loader {
+    max-width: 42px;
+    width: 42px;
+    height: auto;
+    margin-left: 1rem;
+}
+.loader div {
+    font-size: 0.6rem;
+    border-top: 0.5em solid rgba(0, 0, 0, 0.05);
+    border-right: 0.5em solid rgba(0, 0, 0, 0.05);
+    border-bottom: 0.5em solid rgba(0, 0, 0, 0.05);
+    border-left: 0.5em solid #669;
+    transform: translateZ(0);
+    animation: load8 1s infinite linear;
+}
+
+.loader div,
+.loader div::after {
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
 }
 
 .select-mask {
@@ -160,6 +204,7 @@ a {
         display: flex;
         flex-wrap: wrap;
 
+        .info,
         .error,
         .success {
             width: 100%;
