@@ -87,7 +87,15 @@ export default class UsernameInput extends Component {
             state.custom = '';
         }
 
-        if (this.state.isError !== state.isError) {
+        const totalSuggestions = ({ suggestions = [] }) => suggestions.length;
+        const diffSuggestions = state.isError && totalSuggestions(this.state) !== totalSuggestions(state);
+
+        /*
+            Inform the webapp about the current state of the input.
+            we resize the iframe, so if we have an error or not we need to know
+            idem if we don't have the same number of suggestions ex: username taken, then remove username
+         */
+        if (this.state.isError !== state.isError || diffSuggestions) {
             callBridgeStateInput(state, this.props);
         }
 
