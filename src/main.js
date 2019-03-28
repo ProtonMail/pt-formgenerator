@@ -63,7 +63,7 @@ const cb = ({ origin, data: { type, data = {}, fallback = false } = {} }) => {
         callBridge(
             {
                 id: '{{id}}',
-                form: getConfig([...document.querySelectorAll('input, select')])
+                form: getConfig([...document.querySelectorAll('input:valid, select')])
             },
             { iframeName: node.getAttribute('data-name') }
         );
