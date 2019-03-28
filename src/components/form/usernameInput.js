@@ -132,9 +132,12 @@ export default class UsernameInput extends Component {
     }
 
     render({ domains, ...props }) {
+        // pattern support for :valid is 100%, minlength not supported on IE11
+        const pattern = `.{${props.minlength},${props.maxlength}}`;
         return (
             <LabelInputField
                 {...omit(props, ['errors', 'maxlength', 'minlength', 'api'])}
+                pattern={pattern}
                 value={this.state.custom || this.state.value}
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}
