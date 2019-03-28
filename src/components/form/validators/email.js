@@ -10,7 +10,7 @@ function createValidator(errors = {}) {
             classNames: []
         };
 
-        if (!value || !REGEX_EMAIL.test(value)) {
+        if (value && !REGEX_EMAIL.test(value)) {
             return {
                 ...state,
                 isError: true,
