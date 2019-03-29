@@ -12,7 +12,7 @@ const babelConfig = {
                 targets: {
                     browsers: ['ie 11']
                 },
-                useBuiltIns: 'usage'
+                useBuiltIns: 'entry'
             }
         ]
     ],
@@ -32,12 +32,29 @@ const plugins = [
     terser()
 ];
 
-export default {
-    input: 'src/main.js',
-    output: {
-        file: `dist/main.js`,
-        format: 'umd', // iife or umd for our app, with cjs window is broken
-        name: 'abuseForm'
+export default [
+    {
+        input: 'src/main.js',
+        output: {
+            file: `dist/main.ie11.js`,
+            format: 'umd', // iife or umd for our app, with cjs window is broken
+            name: 'abuseForm'
+        },
+        plugins
     },
-    plugins
-};
+    {
+        input: 'src/main.js',
+        output: {
+            file: `dist/main.js`,
+            format: 'umd', // iife or umd for our app, with cjs window is broken
+            name: 'abuseForm'
+        },
+        plugins: [
+            stripCode({
+                start_comment: 'START.IE_ONLY',
+                end_comment: 'END.IE_ONLY'
+            }),
+            ...plugins
+        ]
+    }
+];

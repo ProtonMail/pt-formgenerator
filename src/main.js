@@ -1,5 +1,7 @@
 import { h, render } from 'preact';
-
+/* START.IE_ONLY */
+import '@babel/polyfill';
+/* END.IE_ONLY */
 import App from './App';
 import bridge, { setEnvUrl, setAppEnvUrl, testOrigin } from './lib/bridge';
 
@@ -33,7 +35,7 @@ const getConfig = (nodes) => {
 
 const matchIframe = (name) => {
     const url = window.location.search || '';
-    return url.includes(`name=${name}`);
+    return url.indexOf(`name=${name}`) > -1;
 };
 
 const cb = ({ origin, data: { type, data = {}, fallback = false } = {} }) => {
