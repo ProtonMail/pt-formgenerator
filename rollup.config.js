@@ -11,7 +11,8 @@ const babelConfig = {
             {
                 targets: {
                     browsers: ['ie 11']
-                }
+                },
+                useBuiltIns: 'usage'
             }
         ]
     ],
