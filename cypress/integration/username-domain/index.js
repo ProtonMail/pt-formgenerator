@@ -6,6 +6,9 @@ context('Test username domain component', () => {
         if (type === 'username') {
             return cy.get('input[name="username"]');
         }
+        if (type === 'loader') {
+            return cy.get('.loader');
+        }
         if (type === 'error') {
             return cy.get('.error');
         }
@@ -71,7 +74,7 @@ context('Test username domain component', () => {
 
         it('displays a minlength error if value < 3', () => {
             const input = getNode('username');
-            input.type('a');
+            input.type('d');
             input.blur();
 
             const node = getNode('error');
@@ -97,7 +100,11 @@ context('Test username domain component', () => {
 
             cy.wait(1000);
 
-            getNode('error').should('not.exist');
+            getNode('error')
+                .invoke('text')
+                .then((txt) => {
+                    expect(txt).to.eq('Username already used');
+                });
         });
 
         it('displays a maxerror error if value > 15', () => {
@@ -144,6 +151,16 @@ context('Test username domain component', () => {
     });
 
     context('Validation: Suggestion', () => {
+        it('has a loader', () => {
+            const input = getNode('username');
+            input.clear();
+            input.type('dew');
+            input.blur();
+
+            const node = getNode('loader');
+            node.should('exist');
+        });
+
         it('displays 3 buttons', () => {
             const input = getNode('username');
             input.clear();

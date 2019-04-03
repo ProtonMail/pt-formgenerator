@@ -12,8 +12,40 @@ const ERRORS = {
     }
 };
 
-function main() {
-    console.log('TRIGGER ACTION');
+async function main() {
+    async function query(url) {
+        const res = await fetch(`https://mail.protonmail.com/api/users/${url}`, {
+            headers: {
+                'x-pm-apiversion': '3',
+                'x-pm-appversion': 'Web_3.15.23',
+                Accept: 'application/vnd.protonmail.v1+json'
+            }
+        });
+        return { data: await res.json(), success: res.ok };
+    }
+
+    // Else e2e won't work
+    window.parent.addEventListener(
+        'message',
+        async (e) => {
+            if (e.data.type === 'usernameInput.request') {
+                const { name, queryParam = {} } = e.data.data || {};
+                const data = await query(`available?Name=${queryParam.Name}`);
+
+                window.postMessage(
+                    {
+                        type: 'usernameInput.query',
+                        data,
+                        value: queryParam.Name,
+                        targetOrigin: '*'
+                    },
+                    '*'
+                );
+            }
+        },
+        true
+    );
+
     window.postMessage(
         {
             type: 'create.form',
