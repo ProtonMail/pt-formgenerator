@@ -4,8 +4,6 @@ Tested with:
 
 Before you start: `$ npm i`.
 
-**Broken CI - 03/2019** _Because of the last patch to control the API via the bridge the CI is dead. To fix it we need to wait for the webapp release, to test it against live API, or a custom bridge_
-
 ## Dev
 
 - `$ npm start`
@@ -104,9 +102,17 @@ window.postMessage({
 - `$ npm run build`
 
 It will create 3 files:
+- `dist/main.ie11.js`: _App bundle for IE11_
+- `dist/main.ie11.js.map`: __Sourcemap__
 - `dist/main.js`: _App bundle_
 - `dist/main.js.map`: _Sourcemap_
 - `dist/main.css`: _Stylesheet_
+
+### Dev build
+
+- `$ npm run dev`
+
+> :warning: _It won't build the version for IE_
 
 ### New version
 
