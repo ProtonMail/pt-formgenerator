@@ -37,6 +37,9 @@ export default class UsernameInput extends Component {
         super();
         this.validator = usernameValidator(props.errors);
         this.onMessage = this.onMessage.bind(this);
+        this.state = {
+            value: props.value
+        };
     }
 
     componentDidMount() {
@@ -136,7 +139,7 @@ export default class UsernameInput extends Component {
         const pattern = `.{${props.minlength},${props.maxlength}}`;
         return (
             <LabelInputField
-                {...omit(props, ['errors', 'maxlength', 'minlength', 'api'])}
+                {...omit(props, ['errors', 'maxlength', 'minlength', 'api', 'value'])}
                 pattern={pattern}
                 value={this.state.custom || this.state.value}
                 className={COMPONENT_CLASSNAME}

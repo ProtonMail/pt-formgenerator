@@ -12,6 +12,14 @@ const ERRORS = {
     }
 };
 
+const getQueryParams = () => {
+    return window.location.search.split('&').reduce((acc, item = '') => {
+        const [key = '', value = ''] = item.split('=');
+        acc[key.replace(/\?|&/, '').trim()] = value.trim();
+        return acc;
+    }, {});
+};
+
 async function main() {
     async function query(url) {
         const res = await fetch(`https://mail.protonmail.com/api/users/${url}`, {
@@ -23,6 +31,8 @@ async function main() {
         });
         return { data: await res.json(), success: res.ok };
     }
+
+    console.log('[queryParams]', getQueryParams());
 
     // Else e2e won't work
     window.parent.addEventListener(
@@ -93,6 +103,7 @@ async function main() {
                         minlength: 3,
                         required: true,
                         name: 'username',
+                        value: getQueryParams().username,
                         errors: ERRORS.USERNAME,
                         domains: {
                             component: 'domains',

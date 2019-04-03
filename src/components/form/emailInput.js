@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import debounce from 'lodash/debounce';
+import omit from 'lodash/omit';
 
 import LabelInputField from './labelInputField';
 import bridge from '../../lib/bridge';
@@ -28,7 +29,7 @@ export default class EmailInput extends Component {
     render({ domains, ...props }) {
         return (
             <LabelInputField
-                {...props}
+                {...omit(props, ['errors'])}
                 value={this.state.value}
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}

@@ -212,4 +212,17 @@ context('Test username domain component', () => {
             });
         });
     });
+    context('Load the page with a username', () => {
+        beforeEach(() => {
+            cy.visit(Cypress.env('server') + '?name=top&username=monique');
+        });
+
+        it('binds the vlaue inside the input', () => {
+            const input = getNode('username');
+
+            input.should('exist');
+            input.should('have.attr', 'id', 'username');
+            input.should('have.value', 'monique');
+        });
+    });
 });
