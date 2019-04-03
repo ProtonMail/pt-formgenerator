@@ -62,10 +62,12 @@ const cb = ({ origin, data: { type, data = {}, fallback = false } = {} }) => {
     // Fallback mode, we extract the values from iframes and sent it back to the app
     if (type === 'submit.broadcast' && fallback) {
         const callBridge = bridge('child.message.data', (item) => item);
+
+        // Error is a convention all error classNames on input must have error inside.
         callBridge(
             {
                 id: '{{id}}',
-                form: getConfig([...document.querySelectorAll('input:valid, select')])
+                form: getConfig([...document.querySelectorAll(':not([class*="error"]), select')])
             },
             { iframeName: node.getAttribute('data-name') }
         );

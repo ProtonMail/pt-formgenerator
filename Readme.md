@@ -14,6 +14,11 @@ That's it. Now you can test:
 - URL: `http://localhost:1234/?name=bottom`
 - URL: `http://localhost:1234/?name=top`
 
+### Conventions
+
+When there is an error on an input it must have a className/error with `error` inside. Why ?
+Because we need `input:not([class*="error"])` to check the validity.
+
 ### About dev env
 
 - URL: `http://localhost:1234/?name=bottom`
@@ -63,13 +68,6 @@ window.postMessage({
         config: [
             {
                 component: 'username',
-                api: {
-                    url: 'https://mail.protonmail.com/api/users/available',
-                    headers: {
-                        'x-pm-apiversion': 3,
-                        'x-pm-appversion': 'Web_3.15.13'
-                    }
-                },
                 label: 'Choose a username',
                 placeholder: 'Jean Valjean',
                 maxlength: 10,
@@ -109,3 +107,8 @@ It will create 3 files:
 - `dist/main.js`: _App bundle_
 - `dist/main.js.map`: _Sourcemap_
 - `dist/main.css`: _Stylesheet_
+
+### New version
+
+- `$ npm run version <patch|minor|major>` 
+and :popcorn: it will do everything else.
