@@ -6,4 +6,4 @@ workflows:
         jobs:
             - cypress/run:
                   record: false
-                  start: 'npm run lint && npm start'
+                  start: 'npm start'
