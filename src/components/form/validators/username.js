@@ -20,10 +20,12 @@ function createValidator(errors = {}) {
         }
 
         if (success === false) {
+            // too many requests
+            const error = requestData.Code === 429 ? errors.TOO_MUCH : requestData.Error;
             return {
                 ...state,
                 isError: true,
-                errors: [requestData.Error],
+                errors: [error],
                 classNames: ['input-error-username'],
                 suggestions: (requestData.Details || {}).Suggestions
             };

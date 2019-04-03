@@ -5,7 +5,10 @@ const ERRORS = {
         REQUIRED: 'You must set a username',
         MAXLENGTH: 'Max length for a username is 15',
         MINLENGTH: 'Min length for a username is 3',
-        PATTERN: 'It must contains only letters/digits or - and start with a letter/digit'
+        PATTERN: 'It must contains only letters/digits or - and start with a letter/digit',
+        TOO_MUCH: 'You are doing this too much, please try again later',
+        OFFLINE: 'No Internet connection found.',
+        REQUEST: 'The request failed'
     },
     EMAIL: {
         PATTERN: 'Invalid email'
@@ -22,14 +25,23 @@ const getQueryParams = () => {
 
 async function main() {
     async function query(url) {
-        const res = await fetch(`https://mail.protonmail.com/api/users/${url}`, {
-            headers: {
-                'x-pm-apiversion': '3',
-                'x-pm-appversion': 'Web_3.15.23',
-                Accept: 'application/vnd.protonmail.v1+json'
-            }
-        });
-        return { data: await res.json(), success: res.ok };
+        try {
+            const res = await fetch(`https://protonmail.blue/api/users/${url}`, {
+                headers: {
+                    'x-pm-apiversion': '3',
+                    'x-pm-appversion': 'Web_3.15.23',
+                    Accept: 'application/vnd.protonmail.v1+json'
+                }
+            });
+            return { data: await res.json(), success: res.ok };
+        } catch (e) {
+            return {
+                data: {
+                    Error: navigator.onLine ? ERRORS.USERNAME.REQUEST : ERRORS.USERNAME.OFFLINE
+                },
+                success: false
+            };
+        }
     }
 
     console.log('[queryParams]', getQueryParams());
