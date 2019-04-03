@@ -19,6 +19,8 @@ const babelConfig = {
     plugins: [['transform-react-jsx', { pragma: 'h' }]]
 };
 
+const isDev = process.env.NODE_ENV === 'dev';
+
 const plugins = [
     stripCode({
         start_comment: 'START.DEV_ONLY',
@@ -28,11 +30,12 @@ const plugins = [
     commonjs({
         include: 'node_modules/**'
     }),
-    babel(babelConfig),
-    terser()
+    babel(babelConfig)
 ];
 
-export default [
+!isDev && plugins.push(terser());
+
+const tasks = [
     {
         input: 'src/main.js',
         output: {
@@ -58,3 +61,8 @@ export default [
         ]
     }
 ];
+
+// Osef IE11 for dev
+isDev && tasks.splice(0, 1);
+
+export default tasks;

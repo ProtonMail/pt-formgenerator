@@ -37,9 +37,6 @@ export default class UsernameInput extends Component {
         super();
         this.validator = usernameValidator(props.errors);
         this.onMessage = this.onMessage.bind(this);
-        this.state = {
-            value: props.value
-        };
     }
 
     componentDidMount() {
@@ -48,6 +45,12 @@ export default class UsernameInput extends Component {
 
     componentWillUnmount() {
         window.rempoveEventListener('message', this.onMessage, false);
+    }
+
+    componentWillMount() {
+        if (typeof this.state.value === 'undefined' && this.props.value) {
+            this.onInput({ target: this.props });
+        }
     }
 
     onMessage({ origin, data: { type, data = {}, value } }) {

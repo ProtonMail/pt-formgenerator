@@ -8,6 +8,7 @@
     "test:e2e": "npm start & sleep 5 && cypress run",
     "start": "parcel src/index.html",
     "lint": "eslint src --ext .js --quiet --cache",
+    "dev": "del dist && NODE_ENV=dev rollup -c --sourcemap && sass src/App.scss > dist/main.css;",
     "build": "del dist && rollup -c --sourcemap && sass src/App.scss | postcss > dist/main.css;",
     "preversion": "git update-index --no-assume-unchanged package-lock.json && git update-index --no-assume-unchanged $(git ls-files dist | tr '\n' ' ') && npm run build && git add dist",
     "postversion": "git update-index --assume-unchanged package-lock.json && git update-index --assume-unchanged $(git ls-files dist | tr '\n' ' ') && git push --tags && git push"
