@@ -1,5 +1,7 @@
 import { h, render } from 'preact';
-
+/* START.IE_ONLY */
+import '@babel/polyfill';
+/* END.IE_ONLY */
 import App from './App';
 import bridge, { setEnvUrl, setAppEnvUrl, testOrigin } from './lib/bridge';
 
@@ -33,7 +35,7 @@ const getConfig = (nodes) => {
 
 const matchIframe = (name) => {
     const url = window.location.search || '';
-    return url.includes(`name=${name}`);
+    return url.indexOf(`name=${name}`) > -1;
 };
 
 const cb = ({ origin, data: { type, data = {}, fallback = false } = {} }) => {
@@ -51,6 +53,10 @@ const cb = ({ origin, data: { type, data = {}, fallback = false } = {} }) => {
         render(<App config={data.config} name={data.name} fallback={fallback} />, node, node.lastChild);
         node.setAttribute('data-name', data.name);
         !fallback && window.removeEventListener('message', cb, false);
+
+        // Give to the parent app, we're ready. ex: to have a loader
+        const callBridge = bridge('app.loaded', (item) => item);
+        callBridge({}, { iframeName: node.getAttribute('data-name') });
     }
 
     // Fallback mode, we extract the values from iframes and sent it back to the app
@@ -59,7 +65,7 @@ const cb = ({ origin, data: { type, data = {}, fallback = false } = {} }) => {
         callBridge(
             {
                 id: '{{id}}',
-                form: getConfig([...document.querySelectorAll('input, select')])
+                form: getConfig([...document.querySelectorAll('input:valid, select')])
             },
             { iframeName: node.getAttribute('data-name') }
         );

@@ -3,6 +3,7 @@ function createValidator(errors = {}) {
         const state = {
             value,
             isError: false,
+            isLoading: false,
             isAvailable: false,
             errors: [],
             classNames: [],

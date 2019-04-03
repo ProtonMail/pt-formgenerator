@@ -22,11 +22,15 @@ const callBridgeUserName = bridge('usernameInput.request', ({ value }) => ({
  * Inform the app about the input's state
  * @param  {String} 'usernameInput.info' name of the event
  */
-const callBridgeStateInput = bridge('usernameInput.info', ({ suggestions = [], isError, isAvailable } = {}) => ({
-    suggestions,
-    isError,
-    isAvailable
-}));
+const callBridgeStateInput = bridge(
+    'usernameInput.info',
+    ({ suggestions = [], isError, isAvailable, isLoading } = {}) => ({
+        suggestions,
+        isError,
+        isLoading,
+        isAvailable
+    })
+);
 
 export default class UsernameInput extends Component {
     constructor(props) {
@@ -58,6 +62,7 @@ export default class UsernameInput extends Component {
             // Erase old custom value if success
             this.setState({
                 isAvailable: data.success,
+                isLoading: false,
                 // custom: data.success ? '' : this.state.custom,
                 ...state
             });
@@ -87,21 +92,29 @@ export default class UsernameInput extends Component {
             state.custom = '';
         }
 
-        if (this.state.isError !== state.isError) {
+        const totalSuggestions = ({ suggestions = [] }) => suggestions.length;
+        const diffSuggestions = state.isError && totalSuggestions(this.state) !== totalSuggestions(state);
+
+        /*
+            Inform the webapp about the current state of the input.
+            we resize the iframe, so if we have an error or not we need to know
+            idem if we don't have the same number of suggestions ex: username taken, then remove username
+         */
+        if (this.state.isError !== state.isError || diffSuggestions || state.isLoading !== this.state.isLoading) {
             callBridgeStateInput(state, this.props);
         }
 
-        return this.setState(state);
-    }
-    onChange({ target }) {
-        const value = target.value || '';
+        this.setState(state);
 
         // Don't perform the validation of the username if no changes or already isError
-        if (this.state.custom === value || this.state.isError) {
+        if (state.custom === value || state.isError) {
             return console.log('--- no change --');
         }
 
+        const newState = { ...state, isLoading: true };
+        this.setState(newState);
         callBridgeUserName({ value }, this.props);
+        callBridgeStateInput(newState, this.props);
     }
 
     chooseSuggestion(value) {
@@ -111,21 +124,24 @@ export default class UsernameInput extends Component {
             suggestions: undefined,
             errors: [],
             classNames: [],
-            isError: false
+            isError: false,
+            isLoading: false
         };
         callBridgeStateInput(state, this.props);
         this.setState(state);
     }
 
     render({ domains, ...props }) {
+        // pattern support for :valid is 100%, minlength not supported on IE11
+        const pattern = `.{${props.minlength},${props.maxlength}}`;
         return (
             <LabelInputField
                 {...omit(props, ['errors', 'maxlength', 'minlength', 'api'])}
+                pattern={pattern}
                 value={this.state.custom || this.state.value}
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}
-                onInput={debounce(this.onInput.bind(this), 200)}
-                onChange={debounce(this.onChange.bind(this), 300)}
+                onInput={debounce(this.onInput.bind(this), 500)}
             >
                 <Select {...domains} />
 
@@ -150,6 +166,14 @@ export default class UsernameInput extends Component {
                 {this.state.isAvailable && (
                     <div class="success">
                         <p>Username available</p>
+                    </div>
+                )}
+                {this.state.isLoading && (
+                    <div className="loaderContainer info">
+                        <p>Checking username </p>
+                        <div class="loader">
+                            <div />
+                        </div>
                     </div>
                 )}
             </LabelInputField>
