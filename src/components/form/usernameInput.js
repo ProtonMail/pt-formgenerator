@@ -160,13 +160,17 @@ export default class UsernameInput extends Component {
                 )}
 
                 {this.state.isError && this.state.suggestions && (
-                    <div class="suggestions">
-                        <h4>Available usernames:</h4>
-                        {this.state.suggestions.map((name) => (
-                            <button type="button" onClick={() => this.chooseSuggestion(name)}>
-                                {name}
-                            </button>
-                        ))}
+                    <div className="suggestions">
+                        <h4 className="suggestions-title">Available usernames:</h4>
+                        <ul className="suggestions-list">
+                            {this.state.suggestions.map((name) => (
+                                <li className="suggestions-item">
+                                    <button type="button" onClick={() => this.chooseSuggestion(name)}>
+                                        {name}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
                 {this.state.isAvailable && (

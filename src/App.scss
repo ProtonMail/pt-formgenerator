@@ -66,11 +66,14 @@ input:not([type='checkbox']):not([type='radio']) {
 }
 
 .suggestions {
+    display: flex;
+    width: 100%;
+    align-items: center;
     border-radius: 4px;
     color: $successTxt;
 
     h4 {
-        margin: 0 0 1rem;
+        margin: 0;
     }
 
     button {
@@ -92,6 +95,16 @@ input:not([type='checkbox']):not([type='radio']) {
     button + button {
         margin-left: 0.5rem;
     }
+}
+
+.suggestions-list {
+    margin: 0 0 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.suggestions-item + .suggestions-item {
+    margin-top: 0.3rem;
 }
 
 .loaderContainer {
