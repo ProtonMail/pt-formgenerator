@@ -4,7 +4,6 @@ import omit from 'lodash/omit';
 
 import LabelInputField from './labelInputField';
 import usernameValidator from './validators/username';
-import Select from './select';
 import bridge, { testOrigin } from '../../lib/bridge';
 
 const COMPONENT_CLASSNAME = 'field-usernameInput';
@@ -147,10 +146,9 @@ export default class UsernameInput extends Component {
                 value={this.state.custom || this.state.value}
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}
+                domains={domains}
                 onInput={debounce(this.onInput.bind(this), 500)}
             >
-                <Select {...domains} />
-
                 {this.state.isError && (
                     <div class="error">
                         {this.state.errors.map((error) => (
