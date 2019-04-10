@@ -138,7 +138,7 @@ export default class UsernameInput extends Component {
 
     render({ domains, ...props }) {
         // pattern support for :valid is 100%, minlength not supported on IE11
-        const pattern = `.{${props.minlength},${props.maxlength}}`;
+        const pattern = `.{${props.minlength || 1},${props.maxlength}}`;
         return (
             <LabelInputField
                 {...omit(props, ['errors', 'maxlength', 'minlength', 'api', 'value'])}
@@ -157,7 +157,7 @@ export default class UsernameInput extends Component {
                     </div>
                 )}
 
-                {this.state.isError && this.state.suggestions && (
+                {this.state.isError && (this.state.suggestions || []).length ? (
                     <div className="suggestions">
                         <h4 className="suggestions-title">Available usernames:</h4>
                         <ul className="suggestions-list">
@@ -170,7 +170,7 @@ export default class UsernameInput extends Component {
                             ))}
                         </ul>
                     </div>
-                )}
+                ) : null}
                 {this.state.isAvailable && (
                     <div class="success">
                         <p>Username available</p>

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test:e2e",
     "test:e2e": "npm start & sleep 5 && cypress run",
     "start": "parcel src/index.html",
     "lint": "eslint src --ext .js --quiet --cache",

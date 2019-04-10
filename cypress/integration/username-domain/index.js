@@ -72,52 +72,17 @@ context('Test username domain component', () => {
             getNode('suggestions').should('not.exist');
         });
 
-        it('displays a minlength error if value < 3', () => {
-            const input = getNode('username');
-            input.type('d');
-            input.blur();
-
-            const node = getNode('error');
-            node.should('exist');
-
-            node.invoke('text').then((txt) => {
-                expect(txt).to.eq('Min length for a username is 3');
-            });
-
-            const input2 = getNode('username');
-            input2.type('e');
-            input2.blur();
-
-            getNode('error')
-                .invoke('text')
-                .then((txt) => {
-                    expect(txt).to.eq('Min length for a username is 3');
-                });
-
-            const input3 = getNode('username');
-            input3.type('1');
-            input3.blur();
-
-            cy.wait(1000);
-
-            getNode('error')
-                .invoke('text')
-                .then((txt) => {
-                    expect(txt).to.eq('Username already used');
-                });
-        });
-
-        it('displays a maxerror error if value > 15', () => {
+        it('displays a maxerror error if value > 40', () => {
             const input = getNode('username');
             input.clear();
-            input.type('apokewofkweopfewfewfwefkweopfkwep');
+            input.type('a'.repeat(41));
             input.blur();
 
             const node = getNode('error');
             node.should('exist');
 
             node.invoke('text').then((txt) => {
-                expect(txt).to.eq('Max length for a username is 15');
+                expect(txt).to.eq('Max length for a username is 40');
             });
         });
 
@@ -146,6 +111,49 @@ context('Test username domain component', () => {
 
             node.invoke('text').then((txt) => {
                 expect(txt).to.eq('Username already used');
+            });
+        });
+    });
+
+    context('Validation: valid input value', () => {
+        it('has a loader', () => {
+            const input = getNode('username');
+            input.clear();
+            input.type('e');
+            input.blur();
+
+            const node = getNode('loader');
+            node.should('exist');
+        });
+
+        it('validates input >=1', () => {
+            const input = getNode('username');
+            input.clear();
+            input.type('e');
+            input.blur();
+
+            // None for input length === 1
+            getNode('suggestions').should('not.exist');
+            const error = getNode('error');
+            error.should('exist');
+
+            error.invoke('text').then((txt) => {
+                expect(txt).to.eq('Username already used');
+            });
+        });
+
+        it('validates input random', () => {
+            const input = getNode('username');
+            input.clear();
+            input.type(`polo-${Date.now()}`);
+            input.blur();
+
+            getNode('suggestions').should('not.exist');
+            const success = getNode('success');
+            success.should('exist');
+
+            success.invoke('text').then((txt) => {
+                expect(txt).to.eq('Username available');
             });
         });
     });
@@ -217,7 +225,7 @@ context('Test username domain component', () => {
             cy.visit(Cypress.env('server') + '?name=top&username=monique');
         });
 
-        it('binds the vlaue inside the input', () => {
+        it('binds the value inside the input', () => {
             const input = getNode('username');
 
             input.should('exist');

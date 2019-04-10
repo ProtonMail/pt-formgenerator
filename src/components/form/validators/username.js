@@ -1,5 +1,8 @@
 function createValidator(errors = {}) {
-    function validator(value, { required, maxlength, minlength, data: { success, data: requestData = {} } = {} }) {
+    function validator(
+        value = '',
+        { required, maxlength, minlength = 1, data: { success, data: requestData = {} } = {} }
+    ) {
         const state = {
             value,
             isError: false,
@@ -31,21 +34,23 @@ function createValidator(errors = {}) {
             };
         }
 
-        const isValidMinLength = minlength && minlength > value.length;
+        const isValidMinLength = value.length >= minlength;
         const isValidMaxLength = maxlength && maxlength < value.length;
 
         if (maxlength && maxlength < value.length) {
             state.errors.push(errors.MAXLENGTH);
             state.classNames.push('input-error-maxlength');
-        }
-        if (minlength && minlength > value.length) {
-            state.errors.push(errors.MINLENGTH);
-            state.classNames.push('input-error-minlength');
+            state.isError = true;
+            state.isAvailable = success === true && !state.isError;
+            return state;
         }
 
-        if (!/^((\w|\d)+(-|\w|\d)+)/.test(value) && !isValidMinLength && !isValidMaxLength) {
+        if (!/^((\w|\d)+(-|\w|\d)+)/.test(value) && value.length > minlength) {
             state.errors.push(errors.PATTERN);
             state.classNames.push('input-error-pattern');
+            state.isError = true;
+            state.isAvailable = success === true && !state.isError;
+            return state;
         }
         state.isError = !!state.errors.length;
         state.isAvailable = success === true && !state.isError;

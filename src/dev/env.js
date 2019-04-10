@@ -3,8 +3,7 @@ import '../App.scss';
 const ERRORS = {
     USERNAME: {
         REQUIRED: 'You must set a username',
-        MAXLENGTH: 'Max length for a username is 15',
-        MINLENGTH: 'Min length for a username is 3',
+        MAXLENGTH: 'Max length for a username is 40',
         PATTERN: 'It must contains only letters/digits or - and start with a letter/digit',
         TOO_MUCH: 'You are doing this too much, please try again later',
         OFFLINE: 'No Internet connection found.',
@@ -111,8 +110,7 @@ async function main() {
                         component: 'username',
                         label: 'Choose a username',
                         placeholder: 'Thomas A. Anderson',
-                        maxlength: 10,
-                        minlength: 3,
+                        maxlength: 40,
                         required: true,
                         name: 'username',
                         value: getQueryParams().username,
