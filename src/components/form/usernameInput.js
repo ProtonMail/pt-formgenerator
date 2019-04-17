@@ -147,7 +147,7 @@ export default class UsernameInput extends Component {
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}
                 domains={domains}
-                onInput={debounce(this.onInput.bind(this), 500)}
+                onInput={debounce(this.onInput.bind(this), 200)}
             >
                 {this.state.isError && (
                     <div class="error">
