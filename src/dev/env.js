@@ -1,5 +1,8 @@
 import '../App.scss';
 
+// With Cypress 3.2.0 it loads Electron 59 without support of AbortControll
+import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
+
 const ERRORS = {
     USERNAME: {
         REQUIRED: 'You must set a username',

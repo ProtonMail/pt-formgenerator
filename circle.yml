@@ -7,3 +7,4 @@ workflows:
             - cypress/run:
                   record: false
                   start: 'npm start'
+                  wait-on: 'http://localhost:1234'
