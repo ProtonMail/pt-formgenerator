@@ -1,10 +1,11 @@
 function createValidator(errors = {}) {
     function validator(
         value = '',
-        { required, maxlength, minlength = 1, data: { success, data: requestData = {} } = {} }
+        { required, maxlength, minlength = 1, data: { success, data: requestData = {} } = {} },
+        omitValue
     ) {
         const state = {
-            value,
+            ...(!omitValue && { value }),
             isError: false,
             isLoading: false,
             isAvailable: false,

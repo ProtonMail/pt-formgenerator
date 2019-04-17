@@ -59,7 +59,7 @@ export default class UsernameInput extends Component {
 
         // Coming from the webapp
         if (type === 'usernameInput.query') {
-            const state = this.validate(value, data);
+            const state = this.validate(value, data, true);
 
             // Always inform the parent that we made a change
             callBridgeStateInput(state, this.props);
@@ -81,11 +81,12 @@ export default class UsernameInput extends Component {
      *     -> data = Response object from api request
      * @param  {String} value Input's value
      * @param  {Object} data  API response from the app
+     * @param  {Boolean} omitValue  True to don't attach the value
      * @return {Object}
      */
-    validate(value, data) {
+    validate(value, data, omitValue) {
         const { required, maxlength, minlength } = this.props;
-        return this.validator(value, { required, maxlength, minlength, data });
+        return this.validator(value, { required, maxlength, minlength, data }, omitValue);
     }
 
     onInput({ target }) {

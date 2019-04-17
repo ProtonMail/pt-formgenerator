@@ -22,16 +22,33 @@ const getQueryParams = () => {
     }, {});
 };
 
+const generateRequest = () => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    return { controller, signal };
+};
+
 async function main() {
+    let REQUEST = generateRequest();
+
     async function query(url) {
         try {
+            if (REQUEST.active) {
+                REQUEST.controller.abort();
+                REQUEST = generateRequest();
+            }
+
+            REQUEST.active = true;
+
             const res = await fetch(`https://mail.protonmail.com/api/users/${url}`, {
+                signal: REQUEST.signal,
                 headers: {
                     'x-pm-apiversion': '3',
                     'x-pm-appversion': 'Web_3.15.23',
                     Accept: 'application/vnd.protonmail.v1+json'
                 }
             });
+            REQUEST.active = false;
             return { data: await res.json(), success: res.ok };
         } catch (e) {
             return {
