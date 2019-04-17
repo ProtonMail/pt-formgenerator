@@ -1,3 +1,10 @@
+function loadPage(username) {
+    const query = username ? `&username=monique` : '';
+    beforeEach(() => {
+        cy.visit(Cypress.env('server') + '?name=top'.concat(query).trim());
+    });
+}
+
 context('Test username domain component', () => {
     const getNode = (type) => {
         if (type === 'domain') {
@@ -20,15 +27,15 @@ context('Test username domain component', () => {
         }
     };
 
-    beforeEach(() => {
-        cy.visit(Cypress.env('server') + '?name=top');
-    });
+    loadPage();
 
     it('displays the component', () => {
         cy.get('[id="app"][data-name="top"]').should('exist');
     });
 
     context('Username input', () => {
+        loadPage();
+
         it('displays the username input', () => {
             const input = getNode('username');
 
@@ -48,6 +55,8 @@ context('Test username domain component', () => {
     });
 
     context('Domains select', () => {
+        loadPage();
+
         it('displays the select domains', () => {
             const node = getNode('domain');
 
@@ -66,6 +75,8 @@ context('Test username domain component', () => {
     });
 
     context('Validation: Invalid input', () => {
+        loadPage();
+
         it('displays nothing on the first load', () => {
             getNode('error').should('not.exist');
             getNode('success').should('not.exist');
@@ -116,6 +127,8 @@ context('Test username domain component', () => {
     });
 
     context('Validation: valid input value', () => {
+        loadPage();
+
         it('has a loader', () => {
             const input = getNode('username');
             input.clear();
@@ -159,6 +172,8 @@ context('Test username domain component', () => {
     });
 
     context('Validation: Suggestion', () => {
+        loadPage();
+
         it('has a loader', () => {
             const input = getNode('username');
             input.clear();
@@ -221,9 +236,7 @@ context('Test username domain component', () => {
         });
     });
     context('Load the page with a username', () => {
-        beforeEach(() => {
-            cy.visit(Cypress.env('server') + '?name=top&username=monique');
-        });
+        loadPage('monique');
 
         it('binds the value inside the input', () => {
             const input = getNode('username');
