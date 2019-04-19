@@ -58,7 +58,24 @@ export default class UsernameInput extends Component {
             throw new Error('Wrong targetOrigin set' + origin);
         }
 
-        // Coming from the webapp
+        /*
+            Force validation if we need to when we try to create the user
+                - untouch form
+                - add password
+                - press enter
+                - we need to validate the form inside the iframe
+         */
+        if (type === 'submit.broadcast') {
+            const state = this.validate(this.state.value);
+
+            // Keep ex: autocompletion if it was already there. Only do it if no error, to check if it's empty
+            if (!this.state.isError) {
+                this.setState(state);
+                // Always inform the parent that we made a change
+                callBridgeStateInput(state, this.props);
+            }
+        }
+
         if (type === 'usernameInput.query') {
             const state = this.validate(value, data, true);
 
