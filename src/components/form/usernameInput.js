@@ -23,11 +23,12 @@ const callBridgeUserName = bridge('usernameInput.request', ({ value }) => ({
  */
 const callBridgeStateInput = bridge(
     'usernameInput.info',
-    ({ suggestions = [], isError, isAvailable, isLoading } = {}) => ({
+    ({ suggestions = [], isError, isAvailable, isLoading, isEnter } = {}) => ({
         suggestions,
         isError,
         isLoading,
-        isAvailable
+        isAvailable,
+        isEnter
     })
 );
 
@@ -87,6 +88,24 @@ export default class UsernameInput extends Component {
     validate(value, data, omitValue) {
         const { required, maxlength, minlength } = this.props;
         return this.validator(value, { required, maxlength, minlength, data }, omitValue);
+    }
+
+    onKeyDown({ key }) {
+        if (key === 'Enter') {
+            const state = this.validate(this.state.value);
+
+            if (!this.state.isError && !this.state.value) {
+                this.setState(state);
+            }
+
+            callBridgeStateInput(
+                {
+                    ...this.state, // source of truth
+                    isEnter: true
+                },
+                this.props
+            );
+        }
     }
 
     onInput({ target }) {
@@ -149,6 +168,7 @@ export default class UsernameInput extends Component {
                 classNameInput={(this.state.classNames || []).join(' ')}
                 domains={domains}
                 onInput={debounce(this.onInput.bind(this), 200)}
+                onKeyDown={debounce(this.onKeyDown.bind(this), 200)}
             >
                 {this.state.isError && (
                     <div class="error">
