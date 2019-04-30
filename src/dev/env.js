@@ -106,7 +106,13 @@ async function main() {
                         placeholder: 'Recovery Email',
                         type: 'email',
                         name: 'notificationEmail',
-                        errors: ERRORS.EMAIL
+                        errors: ERRORS.EMAIL,
+                        messages: {
+                            username: {
+                                AVAILABLE: 'Username available',
+                                CHECKING: 'Checking username'
+                            }
+                        }
                     },
                     {
                         component: 'signupSubmit',

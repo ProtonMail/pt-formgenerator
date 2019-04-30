@@ -213,12 +213,12 @@ export default class UsernameInput extends Component {
                 ) : null}
                 {this.state.isAvailable && (
                     <div class="success">
-                        <p>Username available</p>
+                        <p>{props.messages.username.AVAILABLE}</p>
                     </div>
                 )}
                 {this.state.isLoading && (
                     <div className="loaderContainer info">
-                        <p>Checking username </p>
+                        <p>{props.messages.username.CHECKING}</p>
                         <div class="loader">
                             <div />
                         </div>
