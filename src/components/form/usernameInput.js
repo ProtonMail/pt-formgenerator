@@ -66,13 +66,15 @@ export default class UsernameInput extends Component {
                 - we need to validate the form inside the iframe
          */
         if (type === 'submit.broadcast') {
-            const state = this.validate(this.state.value);
+            const state = this.validate(this.state.value, {
+                success: this.state.isAvailable // Keep success state if available
+            });
 
             // Keep ex: autocompletion if it was already there. Only do it if no error, to check if it's empty
             if (!this.state.isError) {
-                this.setState(state);
                 // Always inform the parent that we made a change
                 callBridgeStateInput(state, this.props);
+                this.setState(state);
             }
         }
 
