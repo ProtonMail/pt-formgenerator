@@ -3,7 +3,7 @@ import { h, render } from 'preact';
 import '@babel/polyfill';
 /* END.IE_ONLY */
 import App from './App';
-import bridge, { setEnvUrl, setAppEnvUrl, testOrigin } from './lib/bridge';
+import bridge, { setEnvUrl, setAppEnvUrl, testOrigin, setFallback } from './lib/bridge';
 
 /* START.DEV_ONLY */
 import envTest from './dev/env';
@@ -48,8 +48,13 @@ const cb = ({ origin, data: { type, data = {}, fallback = false } = {} }) => {
             throw new Error('Wrong targetOrigin set' + origin);
         }
 
+        /*
+            Store current env for the bridge
+         */
         setEnvUrl(origin);
         setAppEnvUrl(data.targetOrigin);
+        setFallback(fallback);
+
         render(<App config={data.config} name={data.name} fallback={fallback} />, node, node.lastChild);
         node.setAttribute('data-name', data.name);
         !fallback && window.removeEventListener('message', cb, false);

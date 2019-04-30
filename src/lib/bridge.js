@@ -40,6 +40,7 @@ const callApp = (type, formatState = noop) => {
             {
                 type,
                 data: {
+                    fallback: CONFIG.fallback,
                     ...extratIframeName(props),
                     ...formatState(state, props)
                 }
@@ -49,6 +50,7 @@ const callApp = (type, formatState = noop) => {
     };
 };
 
+export const setFallback = (test) => (CONFIG.fallback = test);
 export const setEnvUrl = (url) => (CONFIG.URL_ENV = url);
 export const setAppEnvUrl = (url) => (CONFIG.APP_URL_ENV = url);
 
