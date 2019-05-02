@@ -106,13 +106,7 @@ async function main() {
                         placeholder: 'Recovery Email',
                         type: 'email',
                         name: 'notificationEmail',
-                        errors: ERRORS.EMAIL,
-                        messages: {
-                            username: {
-                                AVAILABLE: 'Username available',
-                                CHECKING: 'Checking username'
-                            }
-                        }
+                        errors: ERRORS.EMAIL
                     },
                     {
                         component: 'signupSubmit',
@@ -147,6 +141,12 @@ async function main() {
                         name: 'username',
                         value: getQueryParams().username,
                         errors: ERRORS.USERNAME,
+                        messages: {
+                            username: {
+                                AVAILABLE: 'Username available',
+                                CHECKING: 'Checking username'
+                            }
+                        },
                         domains: {
                             component: 'domains',
                             label: 'Select a domain',
