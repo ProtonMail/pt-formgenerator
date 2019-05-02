@@ -52,8 +52,13 @@ async function main() {
                 }
             });
             REQUEST.active = false;
-            return { data: await res.json(), success: res.ok };
+            const data = await res.json();
+            return { data, success: res.ok };
         } catch (e) {
+            if (REQUEST.active) {
+                return;
+            }
+
             return {
                 data: {
                     Error: navigator.onLine ? ERRORS.USERNAME.REQUEST : ERRORS.USERNAME.OFFLINE
@@ -73,15 +78,16 @@ async function main() {
                 const { name, queryParam = {} } = e.data.data || {};
                 const data = await query(`available?Name=${queryParam.Name}`);
 
-                window.postMessage(
-                    {
-                        type: 'usernameInput.query',
-                        data,
-                        value: queryParam.Name,
-                        targetOrigin: '*'
-                    },
-                    '*'
-                );
+                data &&
+                    window.postMessage(
+                        {
+                            type: 'usernameInput.query',
+                            data,
+                            value: queryParam.Name,
+                            targetOrigin: '*'
+                        },
+                        '*'
+                    );
             }
         },
         true
@@ -135,6 +141,12 @@ async function main() {
                         name: 'username',
                         value: getQueryParams().username,
                         errors: ERRORS.USERNAME,
+                        messages: {
+                            username: {
+                                AVAILABLE: 'Username available',
+                                CHECKING: 'Checking username'
+                            }
+                        },
                         domains: {
                             component: 'domains',
                             label: 'Select a domain',

@@ -23,11 +23,13 @@ const callBridgeUserName = bridge('usernameInput.request', ({ value }) => ({
  */
 const callBridgeStateInput = bridge(
     'usernameInput.info',
-    ({ suggestions = [], isError, isAvailable, isLoading } = {}) => ({
+    ({ suggestions = [], isError, isAvailable, isLoading, isEnter, value } = {}) => ({
         suggestions,
         isError,
         isLoading,
-        isAvailable
+        isAvailable,
+        isEnter,
+        value
     })
 );
 
@@ -57,7 +59,26 @@ export default class UsernameInput extends Component {
             throw new Error('Wrong targetOrigin set' + origin);
         }
 
-        // Coming from the webapp
+        /*
+            Force validation if we need to when we try to create the user
+                - untouch form
+                - add password
+                - press enter
+                - we need to validate the form inside the iframe
+         */
+        if (type === 'submit.broadcast') {
+            const state = this.validate(this.state.value, {
+                success: this.state.isAvailable // Keep success state if available
+            });
+
+            // Keep ex: autocompletion if it was already there. Only do it if no error, to check if it's empty
+            if (!this.state.isError) {
+                // Always inform the parent that we made a change
+                callBridgeStateInput(state, this.props);
+                this.setState(state);
+            }
+        }
+
         if (type === 'usernameInput.query') {
             const state = this.validate(value, data, true);
 
@@ -87,6 +108,24 @@ export default class UsernameInput extends Component {
     validate(value, data, omitValue) {
         const { required, maxlength, minlength } = this.props;
         return this.validator(value, { required, maxlength, minlength, data }, omitValue);
+    }
+
+    onKeyDown({ key }) {
+        if (key === 'Enter') {
+            const state = this.validate(this.state.value);
+
+            if (!this.state.isError && !this.state.value) {
+                this.setState(state);
+            }
+
+            callBridgeStateInput(
+                {
+                    ...this.state, // source of truth
+                    isEnter: true
+                },
+                this.props
+            );
+        }
     }
 
     onInput({ target }) {
@@ -148,7 +187,8 @@ export default class UsernameInput extends Component {
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}
                 domains={domains}
-                onInput={debounce(this.onInput.bind(this), 200)}
+                onInput={debounce(this.onInput.bind(this), 1000)}
+                onKeyDown={debounce(this.onKeyDown.bind(this), 200)}
             >
                 {this.state.isError && (
                     <div class="error">
@@ -174,12 +214,12 @@ export default class UsernameInput extends Component {
                 ) : null}
                 {this.state.isAvailable && (
                     <div class="success">
-                        <p>Username available</p>
+                        <p>{props.messages.username.AVAILABLE}</p>
                     </div>
                 )}
                 {this.state.isLoading && (
                     <div className="loaderContainer info">
-                        <p>Checking username </p>
+                        <p>{props.messages.username.CHECKING}</p>
                         <div class="loader">
                             <div />
                         </div>

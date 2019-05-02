@@ -4,8 +4,8 @@ import bridge from '../../lib/bridge';
 
 const callBridgeSubmit = bridge('submit.init', (item) => item);
 
-function signupSubmit({ messages, button, iframeName, baseUrl, fallback }) {
-    const onClick = () => callBridgeSubmit({ fallback }, { iframeName });
+function signupSubmit({ messages, button, iframeName, baseUrl }) {
+    const onClick = () => callBridgeSubmit({}, { iframeName });
 
     return (
         <footer class="signupSubmit">
