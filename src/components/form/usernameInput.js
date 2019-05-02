@@ -23,12 +23,13 @@ const callBridgeUserName = bridge('usernameInput.request', ({ value }) => ({
  */
 const callBridgeStateInput = bridge(
     'usernameInput.info',
-    ({ suggestions = [], isError, isAvailable, isLoading, isEnter } = {}) => ({
+    ({ suggestions = [], isError, isAvailable, isLoading, isEnter, value } = {}) => ({
         suggestions,
         isError,
         isLoading,
         isAvailable,
-        isEnter
+        isEnter,
+        value
     })
 );
 
