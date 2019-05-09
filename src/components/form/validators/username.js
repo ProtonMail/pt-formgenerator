@@ -46,7 +46,7 @@ function createValidator(errors = {}) {
             return state;
         }
 
-        if (!/^((\w|\d)+(-|\w|\d)+)/.test(value) && value.length > minlength) {
+        if (!/^((\w|\d)+(-|\w|\d|.)+)/.test(value) && value.length > minlength) {
             state.errors.push(errors.PATTERN);
             state.classNames.push('input-error-pattern');
             state.isError = true;

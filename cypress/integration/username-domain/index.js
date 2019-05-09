@@ -169,6 +169,21 @@ context('Test username domain component', () => {
                 expect(txt).to.eq('Username available');
             });
         });
+
+        it('validates an username with a . inside', () => {
+            const input = getNode('username');
+            input.clear();
+            input.type(`polo.${Date.now()}`);
+            input.blur();
+
+            getNode('suggestions').should('not.exist');
+            const success = getNode('success');
+            success.should('exist');
+
+            success.invoke('text').then((txt) => {
+                expect(txt).to.eq('Username available');
+            });
+        });
     });
 
     context('Validation: Suggestion', () => {
