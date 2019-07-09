@@ -6,12 +6,16 @@
   "scripts": {
     "test": "npm run test:e2e",
     "test:e2e": "npm start & sleep 5 && cypress run",
-    "start": "parcel src/index.html",
+    "start": "./tasks/importAssets.sh copy &&  parcel src/index.html",
     "lint": "eslint src --ext .js --quiet --cache",
     "dev": "del dist && NODE_ENV=dev rollup -c --sourcemap && node-sass src/App.scss > dist/main.css;",
-    "dev:css": "node-sass src/App.scss > dist/main.css;",
+    "dev:css": "node-sass src/App.scss > dist/main.css",
+    "prebuild": "./tasks/importAssets.sh copy",
+    "prebuild:css": "./tasks/importAssets.sh copy",
     "build": "del dist && rollup -c --sourcemap && node-sass src/App.scss | postcss > dist/main.css;",
-    "build:css": "node-sass src/App.scss | postcss > dist/main.css;",
+    "build:css": "node-sass src/App.scss | postcss > dist/main.css",
+    "postbuild": "./tasks/importAssets.sh dist",
+    "postbuild:css": "./tasks/importAssets.sh dist",
     "preversion": "git update-index --no-assume-unchanged package-lock.json && git update-index --no-assume-unchanged $(git ls-files dist | tr '\n' ' ') && npm run build && git add dist",
     "postversion": "git update-index --assume-unchanged package-lock.json && git update-index --assume-unchanged $(git ls-files dist | tr '\n' ' ') && git push --tags && git push"
   },
@@ -42,7 +46,8 @@
     "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-strip-code": "^0.2.6",
-    "rollup-plugin-terser": "^5.1.1"
+    "rollup-plugin-terser": "^5.1.1",
+    "svgo": "^1.2.2"
   },
   "lint-staged": {
     "*.js": [
