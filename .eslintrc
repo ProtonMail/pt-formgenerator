@@ -6,6 +6,7 @@
         "react/jsx-indent-props": [2, 4],
         "react/jsx-no-target-blank": [1],
         "react/jsx-no-bind": [0],
-        "react/sort-comp": [0]
+        "react/sort-comp": [0],
+        "arrow-body-style": 0
     }
 }
