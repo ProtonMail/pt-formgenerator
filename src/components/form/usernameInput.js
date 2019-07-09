@@ -203,7 +203,7 @@ export default class UsernameInput extends Component {
                 )}
 
                 {this.state.isError && (this.state.suggestions || []).length ? (
-                    <div className="suggestions flex flex-align-center">
+                    <div className="suggestions mt1 flex flex-align-center">
                         <h5 className="suggestions-title mtauto mbauto mr1">Available usernames:</h5>
                         <ul className="suggestions-list unstyled m0">
                             {this.state.suggestions.map((name) => (
