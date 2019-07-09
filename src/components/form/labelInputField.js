@@ -11,7 +11,9 @@ function labelInputField({ label, children, domains, classNameInput, className, 
                 <label for={attributes.name}>{label}</label>
                 <input {...attributes} id={attributes.name} className={getClassNames('input', classNameInput)} />
 
-                {domains ? <Select {...domains} /> : null}
+                {domains ? (
+                    <Select {...domains} className={classNameInput.includes('invalid') ? 'invalid' : ''} />
+                ) : null}
             </div>
 
             {children}

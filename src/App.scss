@@ -23,32 +23,51 @@ body {
 }
 
 $info: #f4f4f4;
-$success: #a6cc93;
+$success: #5db039;
 $successTxt: #2a411f;
-$error: #cc9393;
-$errorTxt: #555;
-$border: #acb0bf;
+$error: #ec5858;
+$border: #dde6ec;
+$bginput: #fcfdff;
 $color: #222;
 $link: #9397cd;
 
-input:not([type='checkbox']):not([type='radio']) {
-    padding: 0.5rem 1rem;
+input,
+select {
+    background: transparent;
+    vertical-align: middle;
+    -webkit-appearance: none;
+}
+
+select {
+    background: #fcfdff
+        url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zd…aW5rOmhyZWY9IiNzeW1ib2wtb24iIGNsYXNzPSJ3aGl0ZSIgLz4KCjwvc3ZnPg==#css-caret)
+        calc(100% - 6px) 50% no-repeat;
+    background-size: 1.5rem;
+    padding-left: 1em;
+    padding-right: 20px;
+    text-overflow: ellipsis;
+}
+
+input:not([type='checkbox']):not([type='radio']),
+select {
     border: 1px solid $border;
-    border-radius: 4px;
-    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.15);
-    font-size: 1em;
-    color: $color;
+    padding: 0.42857em 1.14286em;
+    background-color: $bginput;
+    border-radius: 3px;
+}
+
+.invalid.invalid.invalid {
+    border-color: $error;
+}
+
+.error {
+    color: $error;
 }
 
 .info,
 .error,
 .success {
-    padding: 0.8rem 1rem;
-    margin: 1rem 0;
-    background: $error;
-    border-radius: 4px;
-    color: $errorTxt;
-
+    margin: 0.5rem 0 1rem;
     p {
         padding: 0;
         margin: 0;
@@ -56,13 +75,11 @@ input:not([type='checkbox']):not([type='radio']) {
 }
 
 .info {
-    background-color: $info;
     color: $color;
 }
 
 .success {
-    background-color: $success;
-    color: $color;
+    color: $success;
 }
 
 .suggestions {
@@ -77,13 +94,13 @@ input:not([type='checkbox']):not([type='radio']) {
     }
 
     button {
-        padding: 0.3rem 1rem;
-        margin: 0;
-        border: 0;
-        border-radius: 4px;
-        box-shadow: inset 0 0 0 1px #acb0bf, 0 1px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+        padding: 0.3571428571em 1.1428571429em 0.4285714286em;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #dde6ec;
         background: #fff;
-        color: $color;
+        color: #262a33;
         cursor: pointer;
 
         &:hover,

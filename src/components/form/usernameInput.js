@@ -176,6 +176,10 @@ export default class UsernameInput extends Component {
         this.setState(state);
     }
 
+    getClassNamesInput() {
+        return [this.state.isError && 'invalid', ...(this.state.classNames || [])].filter(Boolean).join(' ');
+    }
+
     render({ domains, ...props }) {
         // pattern support for :valid is 100%, minlength not supported on IE11
         const pattern = `.{${props.minlength || 1},${props.maxlength}}`;
@@ -185,7 +189,7 @@ export default class UsernameInput extends Component {
                 pattern={pattern}
                 value={this.state.custom || this.state.value}
                 className={COMPONENT_CLASSNAME}
-                classNameInput={(this.state.classNames || []).join(' ')}
+                classNameInput={this.getClassNamesInput()}
                 domains={domains}
                 onInput={debounce(this.onInput.bind(this), 1000)}
                 onKeyDown={debounce(this.onKeyDown.bind(this), 200)}
