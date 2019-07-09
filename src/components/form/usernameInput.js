@@ -195,20 +195,24 @@ export default class UsernameInput extends Component {
                 onKeyDown={debounce(this.onKeyDown.bind(this), 200)}
             >
                 {this.state.isError && (
-                    <div class="error">
+                    <div className="error error-zone">
                         {this.state.errors.map((error) => (
-                            <p>{error}</p>
+                            <p className="color-global-warning error-zone m0">{error}</p>
                         ))}
                     </div>
                 )}
 
                 {this.state.isError && (this.state.suggestions || []).length ? (
-                    <div className="suggestions">
-                        <h4 className="suggestions-title">Available usernames:</h4>
-                        <ul className="suggestions-list">
+                    <div className="suggestions flex flex-align-center">
+                        <h5 className="suggestions-title mtauto mbauto mr1">Available usernames:</h5>
+                        <ul className="suggestions-list unstyled m0">
                             {this.state.suggestions.map((name) => (
                                 <li className="suggestions-item">
-                                    <button type="button" onClick={() => this.chooseSuggestion(name)}>
+                                    <button
+                                        type="button"
+                                        onClick={() => this.chooseSuggestion(name)}
+                                        className="pm-button pm-button--small"
+                                    >
                                         {name}
                                     </button>
                                 </li>
@@ -217,16 +221,14 @@ export default class UsernameInput extends Component {
                     </div>
                 ) : null}
                 {this.state.isAvailable && (
-                    <div class="success">
-                        <p>{props.messages.username.AVAILABLE}</p>
+                    <div className="block-info-standard-success mt1">
+                        <p className="p0-5 m0">{props.messages.username.AVAILABLE}</p>
                     </div>
                 )}
                 {this.state.isLoading && (
-                    <div className="loaderContainer info">
-                        <p>{props.messages.username.CHECKING}</p>
-                        <div class="loader">
-                            <div />
-                        </div>
+                    <div className="loaderContainer info flex flex-items-center mt1">
+                        <p className="p0 m0 italic">{props.messages.username.CHECKING}</p>
+                        <div class="loader ml1" aria-busy="true"></div>
                     </div>
                 )}
             </LabelInputField>

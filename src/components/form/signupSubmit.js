@@ -8,7 +8,7 @@ function signupSubmit({ messages, button, iframeName, baseUrl }) {
     const onClick = () => callBridgeSubmit({}, { iframeName });
 
     return (
-        <footer class="signupSubmit">
+        <footer class="signupSubmit aligncenter flex flex-column flex-items-center">
             <p>
                 <span>{messages.agreeLabel}</span>
                 <br />
@@ -18,11 +18,11 @@ function signupSubmit({ messages, button, iframeName, baseUrl }) {
                 .
             </p>
 
-            <button type="submit" class="btn btn-submit" name="submitBtn" onClick={onClick}>
+            <button type="submit" class="pm-button--primary pm-button--large mb2" name="submitBtn" onClick={onClick}>
                 {button.label}
             </button>
 
-            <a href={`${baseUrl}/login`} class="link" target="_parent">
+            <a href={`${baseUrl}/login`} class="pm-button--link" target="_parent">
                 {messages.alreadyUser}
             </a>
         </footer>
