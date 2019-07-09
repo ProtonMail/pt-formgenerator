@@ -221,7 +221,7 @@ export default class UsernameInput extends Component {
                     </div>
                 ) : null}
                 {this.state.isAvailable && (
-                    <div className="block-info-standard-success mt1">
+                    <div className="block-info-standard-success mt1 success">
                         <p className="p0-5 m0">{props.messages.username.AVAILABLE}</p>
                     </div>
                 )}
