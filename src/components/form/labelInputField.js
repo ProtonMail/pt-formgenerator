@@ -14,7 +14,7 @@ function labelInputField({ label, children, domains, classNameInput, className, 
                 <input
                     {...attributes}
                     id={attributes.name}
-                    className={getClassNames('pm-field input', classNameInput)}
+                    className={getClassNames('pm-field input flex-item-fluid', classNameInput)}
                     aria-invalid={classNameInput.includes('invalid')}
                 />
 
