@@ -258,3 +258,7 @@ a {
         display: none;
     }
 }
+
+input[class*='input-error'][class*='input-error'] {
+    border-color: $error;
+}

@@ -47,12 +47,13 @@ async function main() {
                 signal: REQUEST.signal,
                 headers: {
                     'x-pm-apiversion': '3',
-                    'x-pm-appversion': 'Web_3.15.23',
+                    'x-pm-appversion': 'Web_3.16.3',
                     Accept: 'application/vnd.protonmail.v1+json'
                 }
             });
             REQUEST.active = false;
             const data = await res.json();
+            data.Suggestions.length = 0;
             return { data, success: res.ok };
         } catch (e) {
             if (REQUEST.active) {
