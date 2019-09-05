@@ -23,8 +23,7 @@ const callBridgeUserName = bridge('usernameInput.request', ({ value }) => ({
  */
 const callBridgeStateInput = bridge(
     'usernameInput.info',
-    ({ suggestions = [], isError, isAvailable, isLoading, isEnter, value } = {}) => ({
-        suggestions,
+    ({ isError, isAvailable, isLoading, isEnter, value } = {}) => ({
         isError,
         isLoading,
         isAvailable,
@@ -71,12 +70,23 @@ export default class UsernameInput extends Component {
                 success: this.state.isAvailable // Keep success state if available
             });
 
-            // Keep ex: autocompletion if it was already there. Only do it if no error, to check if it's empty
-            if (!this.state.isError) {
-                // Always inform the parent that we made a change
-                callBridgeStateInput(state, this.props);
+            console.log('----', { state, data }, this.state);
+
+            const newState = { ...state, isLoading: !!this.state.value, isError: false };
+
+            // No username no need to perform a request
+            if (!newState.isLoading) {
+                const state = this.validate(this.state.value);
                 this.setState(state);
+                console.log('----2', state, data);
+                return callBridgeStateInput(state, this.props);
             }
+
+            // Make a request and inform the app about the UI change we need
+            this.setState(newState);
+            callBridgeUserName({ value: this.state.value }, this.props);
+            callBridgeStateInput(newState, this.props);
+            console.log('----3', state, newState);
         }
 
         if (type === 'usernameInput.query') {
@@ -89,7 +99,6 @@ export default class UsernameInput extends Component {
             this.setState({
                 isAvailable: data.success,
                 isLoading: false,
-                // custom: data.success ? '' : this.state.custom,
                 ...state
             });
         }
@@ -132,48 +141,13 @@ export default class UsernameInput extends Component {
         const value = target.value || '';
         const state = this.validate(value);
 
-        // Reset custom value if you type something else
-        if (this.state.custom !== value) {
-            state.custom = '';
-        }
-
-        const totalSuggestions = ({ suggestions = [] }) => suggestions.length;
-        const diffSuggestions = state.isError && totalSuggestions(this.state) !== totalSuggestions(state);
-
         /*
             Inform the webapp about the current state of the input.
             we resize the iframe, so if we have an error or not we need to know
-            idem if we don't have the same number of suggestions ex: username taken, then remove username
          */
-        if (this.state.isError !== state.isError || diffSuggestions || state.isLoading !== this.state.isLoading) {
-            callBridgeStateInput(state, this.props);
-        }
 
         this.setState(state);
-
-        // Don't perform the validation of the username if no changes or already isError
-        if (state.custom === value || state.isError) {
-            return console.log('--- no change --');
-        }
-
-        const newState = { ...state, isLoading: true };
-        this.setState(newState);
-        callBridgeUserName({ value }, this.props);
-        callBridgeStateInput(newState, this.props);
-    }
-
-    chooseSuggestion(value) {
-        const state = {
-            custom: value,
-            isAvailable: true,
-            suggestions: undefined,
-            errors: [],
-            classNames: [],
-            isError: false,
-            isLoading: false
-        };
         callBridgeStateInput(state, this.props);
-        this.setState(state);
     }
 
     render({ domains, ...props }) {
@@ -183,11 +157,11 @@ export default class UsernameInput extends Component {
             <LabelInputField
                 {...omit(props, ['errors', 'maxlength', 'minlength', 'api', 'value'])}
                 pattern={pattern}
-                value={this.state.custom || this.state.value}
+                value={this.state.value}
                 className={COMPONENT_CLASSNAME}
                 classNameInput={(this.state.classNames || []).join(' ')}
                 domains={domains}
-                onInput={debounce(this.onInput.bind(this), 1000)}
+                onInput={this.onInput.bind(this)}
                 onKeyDown={debounce(this.onKeyDown.bind(this), 200)}
             >
                 {this.state.isError && (
@@ -198,20 +172,6 @@ export default class UsernameInput extends Component {
                     </div>
                 )}
 
-                {this.state.isError && (this.state.suggestions || []).length ? (
-                    <div className="suggestions">
-                        <h4 className="suggestions-title">Available usernames:</h4>
-                        <ul className="suggestions-list">
-                            {this.state.suggestions.map((name) => (
-                                <li className="suggestions-item">
-                                    <button type="button" onClick={() => this.chooseSuggestion(name)}>
-                                        {name}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                ) : null}
                 {this.state.isAvailable && (
                     <div class="success">
                         <p>{props.messages.username.AVAILABLE}</p>

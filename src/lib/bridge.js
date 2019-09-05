@@ -19,6 +19,14 @@ export function testOrigin(sourceUrl = '') {
     return /protonmail/.test(sourceUrl);
 }
 
+// Wrapper for E2E to work as expected
+const sendMessage = (config, env) => {
+    /* START.DEV_ONLY */
+    return window.postMessage(config, env);
+    /* END.DEV_ONLY */
+    window.parent.postMessage(config, env);
+};
+
 /**
  * Create a bridge to pass some informations to the parent of the iframe
  * based on state and props.
@@ -36,7 +44,7 @@ const callApp = (type, formatState = noop) => {
         if (window.location.origin !== CONFIG.URL_ENV) {
             return console.error('You try to contact the wrong URL', CONFIG.URL_ENV);
         }
-        window.parent.postMessage(
+        sendMessage(
             {
                 type,
                 data: {
@@ -49,6 +57,10 @@ const callApp = (type, formatState = noop) => {
         );
     };
 };
+
+/* START.DEV_ONLY */
+window.haQueCoucou = callApp;
+/* END.DEV_ONLY */
 
 export const setFallback = (test) => (CONFIG.fallback = test);
 export const setEnvUrl = (url) => (CONFIG.URL_ENV = url);

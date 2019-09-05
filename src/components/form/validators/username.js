@@ -10,8 +10,7 @@ function createValidator(errors = {}) {
             isLoading: false,
             isAvailable: false,
             errors: [],
-            classNames: [],
-            suggestions: undefined
+            classNames: []
         };
 
         if (required && !value) {
@@ -30,8 +29,7 @@ function createValidator(errors = {}) {
                 ...state,
                 isError: true,
                 errors: [error],
-                classNames: ['input-error-username'],
-                suggestions: (requestData.Details || {}).Suggestions
+                classNames: ['input-error-username']
             };
         }
 
