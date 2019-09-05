@@ -10,6 +10,8 @@
     "lint": "eslint src --ext .js --quiet --cache",
     "dev": "del dist && NODE_ENV=dev rollup -c --sourcemap && node-sass src/App.scss > dist/main.css;",
     "dev:css": "node-sass src/App.scss > dist/main.css",
+    "predev": "./tasks/importAssets.sh copy",
+    "postdev": "./tasks/importAssets.sh dist",
     "prebuild": "./tasks/importAssets.sh copy",
     "prebuild:css": "./tasks/importAssets.sh copy",
     "build": "del dist && rollup -c --sourcemap && node-sass src/App.scss | postcss > dist/main.css;",
