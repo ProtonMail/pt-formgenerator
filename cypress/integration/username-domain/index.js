@@ -19,9 +19,7 @@ context('Test username domain component', () => {
         if (type === 'error') {
             return cy.get('.error');
         }
-        if (type === 'suggestions') {
-            return cy.get('.suggestions');
-        }
+
         if (type === 'success') {
             return cy.get('.success');
         }
@@ -78,9 +76,9 @@ context('Test username domain component', () => {
         loadPage();
 
         it('displays nothing on the first load', () => {
+            getNode('loader').should('not.exist');
             getNode('error').should('not.exist');
             getNode('success').should('not.exist');
-            getNode('suggestions').should('not.exist');
         });
 
         it('displays a maxerror error if value > 40', () => {
@@ -111,11 +109,17 @@ context('Test username domain component', () => {
             });
         });
 
-        it('displays an invalid error + suggestion if username exists', () => {
+        it('displays an invalid error if username exists', () => {
             const input = getNode('username');
             input.clear();
             input.type('dew');
             input.blur();
+            getNode('loader').should('not.exist');
+
+            cy.window().then((win) => {
+                win.haQueCoucou('submit.broadcast')({}, { name: 'top' });
+            });
+            getNode('loader').should('exist');
 
             const node = getNode('error');
             node.should('exist');
@@ -135,6 +139,10 @@ context('Test username domain component', () => {
             input.type('e');
             input.blur();
 
+            cy.window().then((win) => {
+                win.haQueCoucou('submit.broadcast')({}, { name: 'top' });
+            });
+
             const node = getNode('loader');
             node.should('exist');
         });
@@ -145,8 +153,10 @@ context('Test username domain component', () => {
             input.type('e');
             input.blur();
 
-            // None for input length === 1
-            getNode('suggestions').should('not.exist');
+            cy.window().then((win) => {
+                win.haQueCoucou('submit.broadcast')({}, { name: 'top' });
+            });
+
             const error = getNode('error');
             error.should('exist');
 
@@ -161,7 +171,10 @@ context('Test username domain component', () => {
             input.type(`polo-${Date.now()}`);
             input.blur();
 
-            getNode('suggestions').should('not.exist');
+            cy.window().then((win) => {
+                win.haQueCoucou('submit.broadcast')({}, { name: 'top' });
+            });
+
             const success = getNode('success');
             success.should('exist');
 
@@ -176,7 +189,10 @@ context('Test username domain component', () => {
             input.type(`polo.${Date.now()}`);
             input.blur();
 
-            getNode('suggestions').should('not.exist');
+            cy.window().then((win) => {
+                win.haQueCoucou('submit.broadcast')({}, { name: 'top' });
+            });
+
             const success = getNode('success');
             success.should('exist');
 
@@ -186,70 +202,6 @@ context('Test username domain component', () => {
         });
     });
 
-    context('Validation: Suggestion', () => {
-        loadPage();
-
-        it('has a loader', () => {
-            const input = getNode('username');
-            input.clear();
-            input.type('dew');
-            input.blur();
-
-            const node = getNode('loader');
-            node.should('exist');
-        });
-
-        it('displays 3 buttons', () => {
-            const input = getNode('username');
-            input.clear();
-            input.type('dew');
-            input.blur();
-
-            const node = getNode('suggestions');
-            node.should('exist');
-            node.find('button').should('have.length', 3);
-        });
-
-        it('selects one suggestion', () => {
-            const input = getNode('username');
-            input.clear();
-            input.type('dew');
-            input.blur();
-
-            const node = getNode('suggestions');
-            node.should('exist');
-            node.find('button')
-                .first()
-                .click();
-
-            getNode('suggestions').should('not.exist');
-            const success = getNode('success');
-            success.should('exist');
-
-            success.invoke('text').then((txt) => {
-                expect(txt).to.eq('Username available');
-            });
-        });
-
-        it('binds the value from suggestion', () => {
-            const input = getNode('username');
-            input.clear();
-            input.type('dew');
-            input.blur();
-
-            const node = getNode('suggestions');
-            node.should('exist');
-            const btn = node.find('button').first();
-
-            btn.invoke('text').then((txt) => {
-                const btn = getNode('suggestions')
-                    .find('button')
-                    .first();
-                btn.click();
-                getNode('username').should('have.value', txt);
-            });
-        });
-    });
     context('Load the page with a username', () => {
         loadPage('monique');
 

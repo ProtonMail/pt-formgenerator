@@ -53,7 +53,6 @@ async function main() {
             });
             REQUEST.active = false;
             const data = await res.json();
-            data.Suggestions.length = 0;
             return { data, success: res.ok };
         } catch (e) {
             if (REQUEST.active) {
@@ -61,9 +60,7 @@ async function main() {
             }
 
             return {
-                data: {
-                    Error: navigator.onLine ? ERRORS.USERNAME.REQUEST : ERRORS.USERNAME.OFFLINE
-                },
+                data: e.data,
                 success: false
             };
         }
@@ -75,6 +72,30 @@ async function main() {
     window.parent.addEventListener(
         'message',
         async (e) => {
+            console.log('message', e.data);
+            if (e.data.type === 'usernameInput.request') {
+                const { name, queryParam = {} } = e.data.data || {};
+                const data = await query(`available?Name=${queryParam.Name}`);
+
+                data &&
+                    window.postMessage(
+                        {
+                            type: 'usernameInput.query',
+                            data,
+                            value: queryParam.Name,
+                            targetOrigin: '*'
+                        },
+                        '*'
+                    );
+            }
+        },
+        true
+    );
+
+    window.addEventListener(
+        'message',
+        async (e) => {
+            console.log('message', e.data);
             if (e.data.type === 'usernameInput.request') {
                 const { name, queryParam = {} } = e.data.data || {};
                 const data = await query(`available?Name=${queryParam.Name}`);

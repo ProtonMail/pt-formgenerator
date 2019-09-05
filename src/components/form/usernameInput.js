@@ -70,12 +70,15 @@ export default class UsernameInput extends Component {
                 success: this.state.isAvailable // Keep success state if available
             });
 
+            console.log('----', { state, data }, this.state);
+
             const newState = { ...state, isLoading: !!this.state.value, isError: false };
 
             // No username no need to perform a request
             if (!newState.isLoading) {
                 const state = this.validate(this.state.value);
                 this.setState(state);
+                console.log('----2', state, data);
                 return callBridgeStateInput(state, this.props);
             }
 
@@ -83,6 +86,7 @@ export default class UsernameInput extends Component {
             this.setState(newState);
             callBridgeUserName({ value: this.state.value }, this.props);
             callBridgeStateInput(newState, this.props);
+            console.log('----3', state, newState);
         }
 
         if (type === 'usernameInput.query') {
