@@ -28,14 +28,14 @@ body {
     color: $pm-global-grey;
 }
 
-.field-select {
-    align-items: center;
+.input {
+    flex: 4;
+}
 
-    &::before {
-        content: '@';
-        width: 1rem;
-        margin: 0 1rem;
-    }
+.field-select {
+    flex: 3;
+    margin-left: 1em;
+    align-items: center;
 }
 .suggestions-item + .suggestions-item {
     margin-top: 0.5rem;
@@ -44,4 +44,25 @@ body {
 .loader {
     width: 2rem;
     height: 2rem;
+}
+
+/* We can't use the rwd from design-system as the iframe is too small even on desktop */
+@media screen and (max-width: 450px) {
+    .field-select {
+        margin-left: 0;
+    }
+
+    .onmobile-flex-column {
+        flex-direction: column;
+    }
+    .onmobile-flex-column > * {
+        width: 100%;
+        flex-basis: auto;
+    }
+    .onmobile-min-w100 {
+        min-width: 100%;
+    }
+    .onmobile-mb1 {
+        margin-bottom: 1em;
+    }
 }

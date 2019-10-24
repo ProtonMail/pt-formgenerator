@@ -155,7 +155,7 @@ export default class UsernameInput extends Component {
         const pattern = `.{${props.minlength || 1},${props.maxlength}}`;
         return (
             <LabelInputField
-                {...omit(props, ['errors', 'maxlength', 'minlength', 'api', 'value'])}
+                {...omit(props, ['errors', 'maxlength', 'minlength', 'api', 'value', 'messages'])}
                 pattern={pattern}
                 value={this.state.value}
                 className={COMPONENT_CLASSNAME}
