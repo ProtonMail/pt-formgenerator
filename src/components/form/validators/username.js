@@ -33,9 +33,6 @@ function createValidator(errors = {}) {
             };
         }
 
-        const isValidMinLength = value.length >= minlength;
-        const isValidMaxLength = maxlength && maxlength < value.length;
-
         if (maxlength && maxlength < value.length) {
             state.errors.push(errors.MAXLENGTH);
             state.classNames.push('input-error-maxlength');

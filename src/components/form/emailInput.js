@@ -40,20 +40,24 @@ export default class EmailInput extends Component {
         return this.setState(state);
     }
 
+    getClassNamesInput() {
+        return [this.state.isError && 'invalid', ...(this.state.classNames || []), 'w100'].filter(Boolean).join(' ');
+    }
+
     render({ domains, ...props }) {
         return (
             <LabelInputField
                 {...omit(props, ['errors'])}
                 value={this.state.value}
                 className={COMPONENT_CLASSNAME}
-                classNameInput={(this.state.classNames || []).join(' ')}
+                classNameInput={this.getClassNamesInput()}
                 onInput={debounce(this.onInput.bind(this), 300)}
                 onKeyDown={debounce(this.onKeyDown.bind(this), 200)}
             >
                 {this.state.isError && (
-                    <div class="error">
+                    <div class="error error-zone">
                         {this.state.errors.map((error) => (
-                            <p>{error}</p>
+                            <p className="color-global-warning error-zone m0">{error}</p>
                         ))}
                     </div>
                 )}
